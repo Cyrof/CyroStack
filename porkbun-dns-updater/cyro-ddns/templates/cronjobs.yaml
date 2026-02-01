@@ -1,0 +1,34 @@
+{{- $ns := .Values.namespace.name -}}
+{{- range .Values.jobs }}
+apiVersion: batch/v1
+kind: CronJob
+metadata:
+  name: cyro-ddns-{{ .name }}
+  namespace: {{ $ns }}
+spec:
+  schedule: "{{ .schedule }}"
+  {{- if $.Values.cronjob.timeZone }}
+  timeZone: "{{ $.Values.cronjob.timeZone }}"
+  {{- end }}
+  suspend: {{ $.Values.cronjob.suspend }}
+  concurrencyPolicy: {{ $.Values.cronjob.concurrencyPolicy }}
+  startingDeadlineSeconds: {{ $.Values.cronjob.startingDeadlineSeconds }}
+  successfulJobsHistoryLimit: {{ .successfulJobsHistoryLimit }}
+  failedJobsHistoryLimit: {{ .failedJobsHistoryLimit }}
+  jobTemplate:
+    spec:
+      ttlSecondsAfterFinished: {{ .ttlSecondsAfterFinished }}
+      backoffLimit: {{ $.Values.cronjob.backoffLimit }}
+      activeDeadlineSeconds: {{ $.Values.cronjob.activeDeadlineSeconds }}
+      template:
+        spec:
+          restartPolicy: {{ $.Values.cronjob.restartPolicy }}
+          containers:
+            - name: ddns-updater
+              image: "{{ $.Values.image.repository }}:{{ $.Values.image.tag }}"
+              imagePullPolicy: {{ $.Values.image.pullPolicy }}
+              envFrom:
+                - secretRef:
+                    name: {{ .secretName }}
+---
+{{- end }}

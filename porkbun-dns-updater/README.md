@@ -1,73 +1,189 @@
-# Porkbun DDNS Cronjob Configuration 
-This folder contains the Kubernetes manifests to run the Porkbun dynamic-DNS updater in k3s. The actual updater script likes in the `porkbun-dns/` submodule&ndash;see [porkbun-dns/README.md](https://github.com/Cyrof/Porkbun-dns) for local usage, Docker builds, and script details.
+# Cyro DDNS &mdash; Porkbun Dynamic DNS (Kubernetes/k3s)
 
-## Configuration Details
-- **CronJob.schedule: `"0 7 * * *"`**
-    - Runs once a day at 07:00 (SGT).
-- **successfulJobsHistoryLimit: `10`**
-    - Keep the last 10 successful jobs for troubleshooting.
-- **failedJobsHistoryLimit: `10`**
-    - Keep the last 10 failed Jobs for debugging.
-- **jobTemplate.spec.ttlSecondsAfterFinished: `604800`**
-    - Automatically delete jobs (and their pods) 7 days (604 800 s) after they finish.
-- **restartPolicy: `OnFailure`**
-    - Only retry on failure&ndash;not on success.
-- **containers[0].image: `cyrof/porkbun-ddns:latest`**
-    Multi-arch Docker image built form the `porkbun-dns/` submodule.
-- **envFrom: secretRef: `porkbun-cred`**
-    - Loads all `PORKBUN_*` environment variables from the Secret.
+This directory contains the Helm chart and supporting configuration used to deploy a Porkbun Dynamic DNS updater into a Kubernetes (k3s) cluster.
 
-## Secret Details (`secret.yaml`)
+The updater periodically:
 
-Create an Opaque Secret named `porkbun-creds` in the `porkbun-ddns` namespace. It must contain:
+1. Detects the current external (public) IP of your router
+2. Compares it against the existing Porkbun DNS record
+3. Updates the DNS record only if the IP has changed
 
-```yaml
-data:
-  PORKBUN_API_KEY:     <your-base64-encoded-api-key>
-  PORKBUN_API_SECRET:  <your-base64-encoded-secret>
-  PORKBUN_DOMAIN:      <your-base64-encoded-domain>
-  PORKBUN_SUBDOMAIN:   <base64-of-empty-or-subdomain>
-  PORKBUN_TTL:         <base64-of-ttl-in-seconds>
-```
-> **Tip:** To supply plaintext values instead, switch `data:` -> `stringData` and drop the base64 encoding.
+This actual updater logic lives in the `porkbun-dns/` submodule located in this repository:
 
-For more on the upodater script and its requirementsm see the submodule's README:
-[porkbun-dns/README](https://github.com/Cyrof/Porkbun-dns)
-    
-## Installation
-### 1. Create the namespace (if missing):
+- See [porkbun-dns/README.md](/porkbun-dns-updater/porkbun-dns/README.md) for:
+    - Local usage
+    - Docker image builds
+    - Script behavior and requirements
+
+## High-level Design
+
+- Helm-managed CronJobs
+    - Daily run (sanity check)
+    - Frequent run (DDNS sync)
+- Secrets managed outside Helm
+    - Created from local env files
+    - Never committed to Git
+- Single domain, multiple records
+    - `knfolio.dev`
+    - `vpn.knfolio.dev`
+
+## CronJob Behavior (Important Safeguards)
+
+To prevent runaway Jobs and stuck Pods, the CronJobs are configured with:
+
+- `concurrencyPolicy: Forbid`
+    - prevents overlapping runs
+- `startingDeadlineSeconds`
+    - avoids "catch-up" job storms
+- `activeDeadlineSeconds`
+    - kills hung jobs automatically
+- Tight job history + TTL cleanup
+
+This avoids the issue where frequent CronJobs pile up indefinitely.
+
+## Secrets Configuration (Required)
+
+Secrets are not mmanaged by Helm and must be created manually from local env files.
+
+### Create the secrets directory (local only)
+
 ```bash
-kubectl create namespace porkbun-ddns
+mkdir -p secrets
 ```
 
-### 2. Apply the Secret (edit `secret.yaml` first):
-```bash
-kubectl apply -f secret.yaml
+### Shared configuration (base)
+
+`secrets/base.env`
+
+```env
+PORKBUN_API_KEY=pk1_...
+PORKBUN_API_SECRET=sk1_...
+PORKBUN_DOMAIN=knfolio.dev
+PORKBUN_TTL=300
 ```
 
-### 3. Deploy the CronJob:
-```bash
-kubectl apply -f cronjob-dns.yaml
+This file contains values shared by all records.
+
+### Record-specific overrides
+
+#### Main domain (`knfolio.dev`)
+
+`secrets/main.env`
+
+```env
+PORKBUN_SUBDOMAIN=
 ```
 
-### 4. Verify:
-```bash
-kubectl get cronjob porkbun-ddns -n porkbun-ddns
-kubectl describe cronjob porkbun-ddns -n porkbun-ddns
+#### VPN record (`vpn.knfolio.dev`)
+
+`secrets/vpn.env`
+
+```env
+PORKBUN_SUBDOMAIN=vpn
 ```
+
+### Create / update Kubernetes Secrets
+
+```bash
+kubectl create namespace cyro-ddns --dry-run=client -o yaml | kubectl apply -f -
+```
+
+#### Main domain secret
+
+```bash
+kubectl -n cryo-ddns create secret generic porkbun-creds \
+    --from-env-file=secrets/base.env \
+    --from-env-file=secrets/main.env \
+    --dry-run=client -o yaml | kubectl apply -f -
+```
+
+#### VPN domain secret
+
+```bash
+kubectl -n cryo-ddns create secret generic porkbun-creds-vpn \
+    --from-env-file=secrets/base.env \
+    --from-env-file=secrets/vpn.env \
+    --dry-run=client -o yaml | kubectl apply -f -
+```
+
+> Kubernetes automatically base64-encodes values internally &mdash; no manual encoding required.
+
+## Helm Deployment
+
+### Install / upgrade the release
+
+```bash
+helm upgrade --install cyro-ddns ./cryo-ddns \
+    --namespace cyro-ddns \
+    --create-namespace
+```
+
+### Verify CronJobs
+
+```bash
+kubectl get cronjob -n cryo-ddns
+```
+
+You should see:
+
+- main daily
+- main frequent
+- vpn daily
+- vpn frequent
 
 ## Manual Testing
-Kick off a one-off job from the CronJob:
-```bash
-kubectl create job manual-ddns-test \
-    --from=cronjob/porkbun-ddns \
-    -n porkbun-ddns
 
-# Stream its logs
-kubectl logs -f job/manual-ddns-test -n porkbun-ddns
+Trigger a one-off run to verify behavior immediately.
+
+### Main DDNS test
+
+```bash
+kubectl -n cyro-ddns create job \
+    --from=cronjob/porkbun-ddns-main-frequent \
+    manual-ddns-test-main
 ```
 
-## Notes
-- Make sure your cluster can reach the Porkbun API `api.porkbun.com` and `api.ipify.org`.
-- DNS for `PORKBUN_DOMAIN` must already point at your external IP (or updaates won't be visible).
-- Adjust `schedule`, history limits, or TTL to match your policy.
+### VPN DDNS test
+
+```bash
+kubectl -n  cyro-ddns create job \
+    --from=cronjob/porkbun-ddns-vpn-frequent \
+    manual-ddns-test-vpn
+```
+
+### Watch logs
+
+```bash
+kubectl logs -f job/manual-ddns-test-main -n cryo-ddns
+```
+
+Successful runs should:
+
+- Fetch external IP
+- Compare with existing DNS record
+- Exit cleanly (even if no update is needed)
+
+## Verification (Outside the Cluster)
+
+```bash
+dig +short knfolio.dev
+dig +short vpn.knfolio.dev
+
+curl -s https://api.ipify.org
+```
+
+The DNS records should eventually resolve to the current public IP (subject to TTL).
+
+## Notes & Requirements
+
+- Cluster must be able to reach:
+    - `api.porkbun.com`
+    - `api.ipify.org`
+- DNS records must already exist in Porkbun
+- TTL should remain short (e.g. 300s) for DDNS use
+- Secrets directory must be gitignored
+
+```gitignore
+secrets/
+*.env
+```

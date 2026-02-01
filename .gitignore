@@ -127,3 +127,7 @@ vendordiff.patch
 
 # ansible host file
 **.ini
+
+# secrets / env
+**secrets/
+*.env

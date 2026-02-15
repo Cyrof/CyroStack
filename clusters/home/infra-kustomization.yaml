@@ -1,5 +1,5 @@
 apiVersion: kustomize.toolkit.fluxcd.io/v1
-kind: Kustomisation
+kind: Kustomization
 metadata:
   name: infra
   namespace: flux-system

@@ -2,9 +2,11 @@ apiVersion: helm.toolkit.fluxcd.io/v2
 kind: HelmRelease
 metadata:
   name: wakeonlan
-  namespace: wol
+  namespace: flux-system
 spec:
   interval: 10m
+
+  targetNamespace: wol
 
   chart:
     spec:

@@ -8,7 +8,7 @@ data:
     image:
       repository: cyrof/remotewakeserver
       tag: latest
-      pullPolicy: IfNotPresent
+      pullPolicy: Always
 
     replicaCount: 1
 

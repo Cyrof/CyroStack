@@ -4,4 +4,5 @@ kind: Kustomization
 resources:
   - weave-gitops
   - nginx
-  - cert-manager
+  - cert-manager-kustomization.yaml
+  - cert-manager-issuer-kustomization.yaml

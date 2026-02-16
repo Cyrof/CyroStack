@@ -30,3 +30,42 @@ spec:
 
   values:
     installCRDs: true
+
+    nodeSelector:
+      role: edge
+      kubernetes.io/arch: "arm64"
+      kubernetes.io/os: "linux"
+
+    tolerations:
+      - key: "node-role.kubernetes.io/control-plane"
+        operator: "Exists"
+        effect: "NoSchedule"
+      - key: "node-role.kubernetes.io/master"
+        operator: "Exists"
+        effect: "NoSchedule"
+
+    webhook:
+      nodeSelector:
+        role: edge
+        kubernetes.io/arch: "arm64"
+        kubernetes.io/os: "linux"
+      tolerations:
+        - key: "node-role.kubernetes.io/control-plane"
+          operator: "Exists"
+          effect: "NoSchedule"
+        - key: "node-role.kubernetes.io/master"
+          operator: "Exists"
+          effect: "NoSchedule"
+
+      cainjector:
+        nodeSelector:
+          role: edge
+          kubernetes.io/arch: "arm64"
+          kubernetes.io/os: "linux"
+        tolerations:
+          - key: "node-role.kubernetes.io/control-plane"
+            operator: "Exists"
+            effect: "NoSchedule"
+          - key: "node-role.kubernetes.io/master"
+            operator: "Exists"
+            effect: "NoSchedule"

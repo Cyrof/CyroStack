@@ -131,3 +131,8 @@ vendordiff.patch
 # secrets / env
 **secrets/
 *.env
+
+# tmp
+tmp/
+
+.sops.yaml

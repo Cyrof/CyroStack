@@ -6,3 +6,4 @@ resources:
   - nginx
   - cert-manager-kustomization.yaml
   - cert-manager-issuer-kustomization.yaml
+  - porkbun-dns-updator

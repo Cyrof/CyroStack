@@ -1,0 +1,46 @@
+namespace:
+  create: false
+  name: cyro-ddns
+
+image:
+  repository: cyrof/porkbun-ddns
+  tag: latest
+  pullPolicy: IfNotPresent
+
+cronjob:
+  timeZone: "Asia/Singapore"
+  concurrencyPolicy: "Forbid"
+  startingDeadlineSeconds: 60
+  activeDeadlineSeconds: 60
+  backoffLimit: 1
+  restartPolicy: "Never"
+  suspend: false
+
+jobs:
+  - name: main-daily
+    schedule: "0 7 * * *"
+    secretName: porkbun-creds
+    successfulJobsHistoryLimit: 10
+    failedJobsHistoryLimit: 10
+    ttlSecondsAfterFinished: 259200
+
+  - name: main-frequent
+    schedule: "*/10 * * * *"
+    secretName: porkbun-creds
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    ttlSecondsAfterFinished: 300
+
+  - name: vpn-daily
+    schedule: "0 7 * * *"
+    secretName: porkbun-creds-vpn
+    successfulJobsHistoryLimit: 10
+    failedJobsHistoryLimit: 10
+    ttlSecondsAfterFinished: 259200
+
+  - name: vpn-frequent
+    schedule: "*/10 * * * *"
+    secretName: porkbun-creds-vpn
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    ttlSecondsAfterFinished: 300

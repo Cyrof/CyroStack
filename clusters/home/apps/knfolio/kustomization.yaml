@@ -4,3 +4,11 @@ resources:
   - namespace.yaml
   - secret.sops.yaml
   - helmrelease.yaml
+
+configMapGenerator:
+  - name: knfolio-values
+    files:
+      - values.yaml=values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

@@ -1,0 +1,30 @@
+nameOverride: ""
+fullnameOverride: "knfolio"
+
+image:
+  repository: cyrof/kn-folio
+  tag: latest
+  pullPolicy: Always
+
+replicaCount: 2
+
+service:
+  name: knfolio-service
+  type: ClusterIP
+  port: 3000
+  targetPort: 3000
+
+ingress:
+  enabled: true
+  className: nginx
+  host: knfolio.dev
+  annotations:
+    cert-manager.io/cluster-issuer: letsencrypt-http01
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+  tls:
+    enabled: true
+    secretName: knfolio-tls
+
+existingSecret:
+  enabled: true
+  name: knfolio-secrets

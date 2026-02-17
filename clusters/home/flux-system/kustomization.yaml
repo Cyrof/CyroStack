@@ -1,0 +1,23 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - gotk-components.yaml
+  - gotk-sync.yaml
+
+patchesJson6902:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: kustomize-controller
+      namespace: flux-system
+    patch: |-
+      - op: replace
+        path: /spec/template/spec/containers/0/args
+        value:
+          - --events-addr=http://notification-controller.$(RUNTIME_NAMESPACE).svc.cluster.local./
+          - --watch-all-namespaces=true
+          - --log-level=info
+          - --log-encoding=json
+          - --enable-leader-election
+          - --sops-age-secret=sops-age

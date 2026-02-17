@@ -1,0 +1,34 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cyro-ddns
+  namespace: flux-system
+spec:
+  interval: 15m
+  targetNamespace: cyro-ddns
+
+  releaseName: cyro-ddns
+
+  chart:
+    spec:
+      chart: ./porkbun-dns-updater/cyro-ddns
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 15m
+
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+
+  upgrade:
+    cleanupOnFail: true
+    remediation:
+      retries: 3
+
+  valuesFrom:
+    - kind: ConfigMap
+      name: cyro-ddns-values
+      valuesKey: values.yaml

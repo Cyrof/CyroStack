@@ -4,5 +4,14 @@ resources:
   - gotk-components.yaml
   - gotk-sync.yaml
 
-patchesStrategicMerge:
-  - kustomize-controller-sops-patch.yaml
+patchesJson6902:
+  - target:
+      group: apps
+      version: v1
+      kind: Deployment
+      name: kustomize-controller
+      namespace: flux-system
+    patch: |-
+      - op: add
+        path: /spec/template/spec/containers/0/args/-
+        value: --sops-age-secret=sops-age

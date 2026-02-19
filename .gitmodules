@@ -15,5 +15,5 @@
 [submodules "wakeonlan"]
 	path = archive/wakeonlan/
 [submodule "GopherGate"]
-	path = GopherGate
+	path = gophergate-deploy/GopherGate
 	url = https://github.com/Cyrof/GopherGate.git

@@ -4,4 +4,4 @@ kind: Kustomization
 resources:
   - wakeonlan
   - knfolio
-
+  - gophergate

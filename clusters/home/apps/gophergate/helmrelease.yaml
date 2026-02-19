@@ -1,0 +1,30 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: gophergate
+  namespace: gophergate
+spec:
+  interval: 5m
+  releaseName: gophergate
+
+  install:
+    createNamespace: false
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+
+  chart:
+    spec:
+      chart: ./gophergate-deploy/gophergate
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 5m
+
+  valuesFrom:
+    - kind: ConfigMap
+      name: gophergate-values
+      valuesKey: values.yaml

@@ -11,7 +11,7 @@ resources:
 configMapGenerator:
   - name: gophergate-values
     files:
-      - values.yaml=valus.yaml
+      - values.yaml=values.yaml
 
 generatorOptions:
   disableNameSuffixHash: true

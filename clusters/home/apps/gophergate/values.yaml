@@ -2,7 +2,7 @@
 agent:
   image:
     repository: cyrof/gophergate
-    tag: gophergate-wg-agent-latest
+    tag: gophergate-wg-agent-v0.4.4
     pullPolicy: Always
   replicaCount: 1
   nodeSelector:
@@ -30,7 +30,7 @@ agent:
 ui:
   image:
     repository: cyrof/gophergate
-    tag: gophergate-ui-latest
+    tag: gophergate-ui-v0.4.0
     pullPolicy: IfNotPresent
   replicaCount: 1
   resources:

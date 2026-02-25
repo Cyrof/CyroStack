@@ -31,6 +31,28 @@ spec:
       - name: WEBSOCKET_ENABLED
         value: "true"
 
+      # SMTP Setting
+      - name: SMTP_HOST
+        value: "smtp.gmail.com"
+
+      - name: SMTP_FROM
+        value: "hs.auto.noreply@gmail.com"
+
+      - name: SMTP_PORT
+        value: "587"
+
+      - name: SMTP_SECURITY
+        value: "starttls"
+
+      - name: SMTP_USERNAME
+        value: "hs.auto.noreply@gmail.com"
+
+      - name: SMTP_PASSWORD
+        valueFrom:
+          secretKeyRef:
+            name: vaultwarden-secret
+            key: SMTP_PASSWORD
+
     secret:
       create: false
       existingSecret: vaultwarden-secret

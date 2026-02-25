@@ -9,7 +9,7 @@ metadata:
 spec:
   tls:
     - hosts:
-        - value.knfolio.dev
+        - vault.knfolio.dev
       secretName: vaultwarden-tls
   rules:
     - host: vault.knfolio.dev

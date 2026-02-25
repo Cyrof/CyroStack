@@ -23,7 +23,7 @@ spec:
         value: "https://vault.knfolio.dev"
 
       - name: SIGNUPS_ALLOWED
-        value: "true"
+        value: "false"
 
       - name: INVITATIONS_ALLOWED
         value: "true"

@@ -6,6 +6,9 @@ namespace: flux-system
 resources:
   - namespace.yaml
   - helmrelease.yaml
+  - secret-main.sops.yaml
+  - secret-vault.sops.yaml
+  - secret-vpn.sops.yaml
 
 configMapGenerator:
   - name: cyro-ddns-values

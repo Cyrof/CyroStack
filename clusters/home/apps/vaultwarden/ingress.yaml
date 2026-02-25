@@ -1,0 +1,24 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: vaultwarden
+  namespace: vaultwarden
+  annotations:
+    kubernetes.io/ingress.class: nginx
+    cert-manager.io/cluster-issuer: letsencrypt-http01
+spec:
+  tls:
+    - hosts:
+        - value.knfolio.dev
+      secretName: vaultwarden-tls
+  rules:
+    - host: vault.knfolio.dev
+      http:
+        paths:
+          - path: /
+            pathType: Prefix
+            backend:
+              service:
+                name: vaultwarden
+                port:
+                  number: 80

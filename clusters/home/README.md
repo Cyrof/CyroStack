@@ -115,7 +115,7 @@ Encrypted files follow:
 Example
 
 ```bash
-infra/porkbun-dns-updater/secret-main.sops.yaml
+sops -e -i infra/porkbun-dns-updater/secret-main.sops.yaml
 ```
 
 ### Descryption Configuration
@@ -126,8 +126,8 @@ infra/porkbun-dns-updater/secret-main.sops.yaml
     ```
 - Flux kustomiza-controller configured with:
   `ini
-  --sops-age-secret=sops-age
-  `
+--sops-age-secret=sops-age
+`
   Secrets are encrypted in Git and decrypted only inside the cluster during reconciliation.
 
 ## How Reconciliation Works

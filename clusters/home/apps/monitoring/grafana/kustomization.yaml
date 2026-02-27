@@ -1,0 +1,6 @@
+apiVersion: kustomiza.config.k8s.io/v1beta1
+kind: Kustomization
+resources:
+  - helmrepository.yaml
+  - secret-admin.sops.yaml
+  - helmrelease.yaml

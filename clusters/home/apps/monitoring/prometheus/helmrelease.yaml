@@ -54,7 +54,7 @@ spec:
 
       service:
         type: ClusterIP
-        port: 80
+        servicePort: 9090
 
       ingress:
         enabled: true

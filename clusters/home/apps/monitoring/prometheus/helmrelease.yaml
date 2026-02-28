@@ -55,4 +55,11 @@ spec:
       service:
         type: ClusterIP
         port: 80
-        targetPort: 9090
+
+      ingress:
+        enabled: true
+        ingressClassName: nginx
+        hosts:
+          - prometheus.cyrostack.arpa
+        path: /
+        pathType: Prefix

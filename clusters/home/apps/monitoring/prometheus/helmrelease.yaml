@@ -67,7 +67,7 @@ spec:
         path: /
         pathType: Prefix
 
-      extraScrapeConfigs:
+      extraScrapeConfigs: |
         - job_name: "blackbox-vaultwarden"
           metrics_path: /probe
           params:

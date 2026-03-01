@@ -58,3 +58,11 @@ spec:
       size: 2Gi
       accessModes:
         - ReadWriteOnce
+
+    securityContext:
+      runAsUser: 472
+      runAsGroup: 472
+      fsGroup: 472
+
+    initChownData:
+      enabled: false

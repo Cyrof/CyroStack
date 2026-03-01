@@ -74,7 +74,7 @@ spec:
             module: [http_2xx]
           static_configs:
             - targets:
-                - https://vault.knfolio.dev/
+        - http://vaultwarden-web.vaultwarden.svc.cluster.local:80/
           relabel_configs:
             - source_labels: [__address__]
               target_label: __param_target

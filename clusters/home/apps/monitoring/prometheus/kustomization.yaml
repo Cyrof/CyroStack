@@ -7,9 +7,9 @@ resources:
   - helmrelease.yaml
 
 configMapGenerator:
-  - name: prometheus-scrap-configs
+  - name: prometheus-scrape-configs
     files:
-      - values.yaml=scrap-configs.yaml
+      - values.yaml=scrape-configs.yaml
 
 generatorOptions:
   disableNameSuffixHash: false

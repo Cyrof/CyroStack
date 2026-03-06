@@ -1,5 +1,18 @@
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
+namespace: monitoring
+
 resources:
   - helmrepository.yaml
   - helmrelease.yaml
+
+configMapGenerator:
+  - name: prometheus-scrap-configs
+    files:
+      - values.yaml=scrap-configs.yaml
+
+generatorOptions:
+  disableNameSuffixHash: false
+
+configurations:
+  - kustomizeconfig.yaml

@@ -1,0 +1,35 @@
+extraScrapeConfigs: |
+  # ============================
+  # Vaultwarden
+  # ============================
+  - job_name: "blackbox-vaultwarden"
+    metrics_path: /probe
+    params:
+      module: [http_2xx]
+    static_configs:
+      - targets:
+          - http://vaultwarden-web.vaultwarden.svc.cluster.local:80/
+    relabel_configs:
+      - source_labels: [__address__]
+        target_label: __param_target
+      - source_labels: [__param_target]
+        target_label: instance
+      - target_label: __address__
+        replacement: blackbox-exporter-prometheus-blackbox-exporter.monitoring.svc.cluster.local:9115
+
+  # ============================
+  # Flux controllers
+  # ============================
+  - job_name: "flux-controllers"
+    kubernetes_sd_configs:
+      - role: pod
+        namespaces:
+          names:
+            - flux-system
+    relabel_configs:
+      - source_labels: [__meta_kubernetes_pod_container_port_number]
+        action: keep
+        regex: "8080"
+      - source_labels: [__meta_kubernetes_pod_name]
+        action: keep
+        regex: "source-controller-.*|kustomize-controller-.*|helm-controller-.*|notification-controller-.*"

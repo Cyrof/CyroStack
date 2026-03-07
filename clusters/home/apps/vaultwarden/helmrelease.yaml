@@ -66,6 +66,9 @@ spec:
     service:
       type: ClusterIP
 
+    deploymentStrategy:
+      type: Recreate
+
     podAnnotations:
       prometheus.io/scrape: "true"
       prometheus.io/port: "9108"

@@ -18,35 +18,24 @@ spec:
     env:
       - name: TZ
         value: Asia/Singapore
-
       - name: DOMAIN
         value: "https://vault.knfolio.dev"
-
       - name: SIGNUPS_ALLOWED
         value: "false"
-
       - name: INVITATIONS_ALLOWED
         value: "true"
-
       - name: WEBSOCKET_ENABLED
         value: "true"
-
-      # SMTP Setting
       - name: SMTP_HOST
         value: "smtp.gmail.com"
-
       - name: SMTP_FROM
         value: "hs.auto.noreply@gmail.com"
-
       - name: SMTP_PORT
         value: "587"
-
       - name: SMTP_SECURITY
         value: "starttls"
-
       - name: SMTP_USERNAME
         value: "hs.auto.noreply@gmail.com"
-
       - name: SMTP_PASSWORD
         valueFrom:
           secretKeyRef:
@@ -66,32 +55,31 @@ spec:
     service:
       type: ClusterIP
 
-    deploymentStrategy:
-      type: Recreate
-
-    podAnnotations:
-      prometheus.io/scrape: "true"
-      prometheus.io/port: "9108"
-      prometheus.io/path: "/metrics"
+    controller:
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "9108"
+        prometheus.io/path: "/metrics"
+      updateStrategy:
+        type: Recreate
 
     extraVolumes:
       - name: exporter-script
         configMap:
           name: vaultwarden-size-exporter
-
       - name: vaultwarden-data-readonly
         persistentVolumeClaim:
           claimName: vaultwarden-storage
 
     extraContainers:
-      - name: vaultwarden-size-exporter
+      vaultwarden-size-exporter:
         image: python:3.12-alpine
         command:
           - python
           - /exporter/exporter.py
         ports:
-          - containerPort: 9108
-            name: metrics
+          - name: metrics
+            containerPort: 9108
         volumeMounts:
           - name: exporter-script
             mountPath: /exporter

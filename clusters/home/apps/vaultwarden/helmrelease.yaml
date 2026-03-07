@@ -67,9 +67,6 @@ spec:
       - name: exporter-script
         configMap:
           name: vaultwarden-size-exporter
-      - name: vaultwarden-data-readonly
-        persistentVolumeClaim:
-          claimName: vaultwarden-storage
 
     extraContainers:
       vaultwarden-size-exporter:
@@ -83,6 +80,6 @@ spec:
         volumeMounts:
           - name: exporter-script
             mountPath: /exporter
-          - name: vaultwarden-data-readonly
+          - name: vaultwarden-storage
             mountPath: /data
             readOnly: true

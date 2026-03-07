@@ -65,3 +65,33 @@ spec:
 
     service:
       type: ClusterIP
+
+    podAnnotations:
+      prometheus.io/scrape: "true"
+      prometheus.io/port: "9108"
+      prometheus.io/path: "/metrics"
+
+    extraVolumes:
+      - name: exporter-script
+        configMap:
+          name: vaultwarden-size-exporter
+
+      - name: vaultwarden-data-readonly
+        persistentVolumeClaim:
+          claimName: vaultwarden-storage
+
+    extraContainers:
+      - name: vaultwarden-size-exporter
+        image: python:3.12-alpine
+        command:
+          - python
+          - /exporter/exporter.py
+        ports:
+          - containerPort: 9108
+            name: metrics
+        volumeMounts:
+          - name: exporter-script
+            mountPath: /exporter
+          - name: vaultwarden-data-readonly
+            mountPath: /data
+            readOnly: true

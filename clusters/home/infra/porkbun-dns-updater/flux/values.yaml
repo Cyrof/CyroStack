@@ -45,7 +45,7 @@ jobs:
     failedJobsHistoryLimit: 1
     ttlSecondsAfterFinished: 300
 
-  - name: vault-dailly
+  - name: vault-daily
     schedule: "0 7 * * *"
     secretName: porkbun-creds-vault
     successfulJobsHistoryLimit: 10
@@ -59,42 +59,42 @@ jobs:
     failedJobsHistoryLimit: 1
     ttlSecondsAfterFinished: 300
 
-  - name: vault-cyrostack-dailly
+  - name: vault-cyrostack-daily
     schedule: "0 7 * * *"
     secretName: porkbun-cyrostack-vault
     successfulJobsHistoryLimit: 10
     failedJobsHistoryLimit: 10
     ttlSecondsAfterFinished: 259200
 
-  - name: vault-frequent
+  - name: vault-cyrostack-frequent
     schedule: "*/10 * * * *"
     secretName: porkbun-cyrostack-vault
     successfulJobsHistoryLimit: 1
     failedJobsHistoryLimit: 1
     ttlSecondsAfterFinished: 300
 
-  - name: vpn-dailly
+  - name: vpn-cyrostack-daily
     schedule: "0 7 * * *"
     secretName: porkbun-cyrostack-vpn
     successfulJobsHistoryLimit: 10
     failedJobsHistoryLimit: 10
     ttlSecondsAfterFinished: 259200
 
-  - name: vpn-frequent
+  - name: vpn-cyrostack-frequent
     schedule: "*/10 * * * *"
     secretName: porkbun-cyrostack-vpn
     successfulJobsHistoryLimit: 1
     failedJobsHistoryLimit: 1
     ttlSecondsAfterFinished: 300
 
-  - name: portfolio-dailly
+  - name: portfolio-cyrostack-daily
     schedule: "0 7 * * *"
     secretName: porkbun-cyrostack-portfolio
     successfulJobsHistoryLimit: 10
     failedJobsHistoryLimit: 10
     ttlSecondsAfterFinished: 259200
 
-  - name: portfolio-frequent
+  - name: portfolio-cyrostack-frequent
     schedule: "*/10 * * * *"
     secretName: porkbun-cyrostack-portfolio
     successfulJobsHistoryLimit: 1

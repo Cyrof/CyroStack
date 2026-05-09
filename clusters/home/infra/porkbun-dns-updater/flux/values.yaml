@@ -58,3 +58,45 @@ jobs:
     successfulJobsHistoryLimit: 1
     failedJobsHistoryLimit: 1
     ttlSecondsAfterFinished: 300
+
+  - name: vault-cyrostack-dailly
+    schedule: "0 7 * * *"
+    secretName: porkbun-cyrostack-vault
+    successfulJobsHistoryLimit: 10
+    failedJobsHistoryLimit: 10
+    ttlSecondsAfterFinished: 259200
+
+  - name: vault-frequent
+    schedule: "*/10 * * * *"
+    secretName: porkbun-cyrostack-vault
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    ttlSecondsAfterFinished: 300
+
+  - name: vpn-dailly
+    schedule: "0 7 * * *"
+    secretName: porkbun-cyrostack-vpn
+    successfulJobsHistoryLimit: 10
+    failedJobsHistoryLimit: 10
+    ttlSecondsAfterFinished: 259200
+
+  - name: vpn-frequent
+    schedule: "*/10 * * * *"
+    secretName: porkbun-cyrostack-vpn
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    ttlSecondsAfterFinished: 300
+
+  - name: portfolio-dailly
+    schedule: "0 7 * * *"
+    secretName: porkbun-cyrostack-portfolio
+    successfulJobsHistoryLimit: 10
+    failedJobsHistoryLimit: 10
+    ttlSecondsAfterFinished: 259200
+
+  - name: portfolio-frequent
+    schedule: "*/10 * * * *"
+    secretName: porkbun-cyrostack-portfolio
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    ttlSecondsAfterFinished: 300

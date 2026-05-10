@@ -1,131 +1,229 @@
-# CyroStack
+<!-- Project Shields -->
 
-This repository documents and manages my **self-hosted Raspberry Pi Kubernetes (k3s) cluster**.
-It serves as the **platform-level infrastructure repo**, covering cluster bootstrap, ingress, certificates, DNS updates, and deployed applications.
+[![Stars](https://img.shields.io/github/stars/Cyrof/CyroStack.svg?style=for-the-badge)](https://github.com/Cyrof/CyroStack/stargazers)
+[![Issues](https://img.shields.io/github/issues/Cyrof/CyroStack.svg?style=for-the-badge)](https://github.com/Cyrof/CyroStack/issues)
+[![Unlicense License](https://img.shields.io/github/license/Cyrof/CyroStack.svg?style=for-the-badge)](https://github.com/Cyrof/CyroStack/blob/main/LICENSE)
+[![LinkedIn](https://img.shields.io/badge/LinkedIn-Profile-blue.svg?style=for-the-badge&logo=linkedin)](https://www.linkedin.com/in/keithnks)
 
-The goal of this repository is **clarity and reproducibility**:
-- what runs in Kubernetes
-- what runs directly on nodes 
-- which Raspberry Pi handles what role 
+<br />
 
-## Cluster Overview
-- **Orchestrator:** k3s
-- **Hardware:** Raspberry Pi cluster
-- **Networking:** Home LAN + external access via dynamic DNS
-- **Ingress:** NGINX Ingress Controller
-- **Certificates:** cert-manager (self-hosted)
-- **Configuration Management:** Ansible 
+<div align="center">
+  <a href="https://github.com/Cyrof/CyroStack">
+    <img src="assets/cyrostack.png" alt="CyroStack Logo" width="160" height="160">
+  </a>
 
-This repository **does not** contain application source code unless it is infrastructure-related. Application logic lives in **separate repositories** and it referenced here when deployed.
+  <h3 align="center">CyroStack</h3>
 
-## Node Layout & Roles
-> IPs are partially masked intentionally.
+  <p align="center">
+    My self-hosted Raspberry Pi Kubernetes homelab platform.
+    <br />
+    <strong>k3s · Flux · NGINX Ingress · cert-manager · Pi-hole · WireGuard · Monitoring</strong>
+    <br />
+    <br />
+    <a href="#about-the-project"><strong>Explore the docs »</strong></a>
+    <br />
+    <br />
+    <a href="#cluster-architecture">Architecture</a>
+    &middot;
+    <a href="#node-layout">Node Layout</a>
+    &middot;
+    <a href="#active-services">Services</a>
+  </p>
+</div>
 
-| Node | IP Address | Role(s) |
-| --- | --- | --- |
-| 1 | `xxx.xxx.xxx.1` | **Control Plane (Master)** |
-| 2 | `xxx.xxx.xxx.2` | **Edge / Ingress Node** |
-| 3 | `xxx.xxx.xxx.3` | **DNS Node (Pi-hole)** |
-| 4 | `xxx.xxx.xxx.4` | **VPN Node** |
+---
 
-### Role Notes 
-- **Master**: runs control plane components only
-- **Edge Node**: dedicated ingress & external traffic handling 
-- **DNS Node**: reserved for Pi-hole / internal DNS
-- **VPN Node**: Hosts WireGuard-based access into the cluster 
+## About The Project
 
-## Kubernetes-Deployed Components (Active)
-These components are deployed **inside the k3s cluster**.
+**CyroStack** is my personal self-hosted Raspberry Pi Kubernetes homelab platform.
 
-### `ansible-configs/`
-- Ansible playbooks for:
-    - node preparation
-    - base OS configuration 
-    - cluster-related automation
+This repository documents and manages the platform-level infrastructure for my home k3s cluster, including:
 
-### `nginx`
-- NGINX Ingress Controller 
-- Handles all inbound HTTP/HTTPS traffic 
-- Acts as the primary entry point for cluster services
+- cluster bootstrap and node preparation
+- Kubernetes infrastructure components
+- ingress routing
+- TLS certificate automation
+- internal DNS
+- VPN access
+- monitoring
+- GitOps-managed services
+- self-hosted application deployment references
 
-### `cert-manager`
-- Manages TLS certificates for internal and external services
-- Used together with NGINX Ingress
-- Self-hosted configuration (no cloud dependency)
+The purpose of this repository is to keep my homelab infrastructure reproducible, organized, and easier to maintain.
 
-### `portfolio`
-- Dynamic DNS updater for Porkbun
-- Automatically updates public IP when ISP/router changes IP
-- Required because home IP changes frequently 
+Application source code is usually kept in separate repositories. This repository mainly focuses on the infrastructure and deployment layer.
 
-## Node-Local Services (Outside Kubernetes)
+---
 
-These services **run directly on specific nodes**, not as pods.
+## Cluster Architecture
 
-### VPN (WireGuard)
-- Runs on the **VPN Node**
-- Provides secure access into the home network and cluster
-- Used by:
-    - personal devices
-    - remote access
-    - cluster administrator
+The diagram below shows the current high-level architecture of CyroStack.
 
-### DNS (Planned - Pi-hole)
-- Runs  on the **DNS Node**
-- Provides:
-    - internal DNS resolution
-    - ad-blocking
-    - split-horizon DNS for cluster service
+It includes the public DNS flow through Porkbun, router port forwarding, the k3s cluster layout, edge ingress routing, internal Pi-hole DNS resolution, WireGuard VPN access, and the main internal services running inside the cluster.
 
-## GopherGate (WireGuard Management)
+<p align="center">
+  <img src="assets/cyrostack-arch-dark.png" alt="CyroStack Architecture Diagram">
+</p>
 
-WireGuard management is handled by **GopherGate**, which is maintained in a **separate repository**.
+---
 
-- This repository may include GopherGate as a **git submodule**
-- Helm charts and application logic live in the GopherGate repo
-- This repo only documents its **integration into the cluster**
+## Node Layout
 
-## Archived Components
-Unused or paused stacks are moved into `archive/`.
+> IP addresses are partially masked intentionally.
 
-This keeps the root clean while preserving history.
+| Node   | IP Address      | Role                   |
+| ------ | --------------- | ---------------------- |
+| Node 1 | `xxx.xxx.xxx.1` | Control Plane / Master |
+| Node 2 | `xxx.xxx.xxx.2` | Edge / Ingress Node    |
+| Node 3 | `xxx.xxx.xxx.3` | DNS Node / Pi-hole     |
+| Node 4 | `xxx.xxx.xxx.4` | VPN Node / WireGuard   |
+| Node 5 | `xxx.xxx.xxx.5` | Worker Node            |
+| Node 6 | `xxx.xxx.xxx.6` | Worker Node            |
+| Node 7 | `xxx.xxx.xxx.7` | Worker Node            |
 
-Example:
-- Previous applications
-- Experimental services
-- One-off deployments
+---
 
-Nothing in `archive/` is considered active.
+## Active Services
+
+### Public Services
+
+These services are publicly reachable through Porkbun DNS and routed into the cluster through the Edge / Ingress Node.
+
+| Service     | Description                      | Domain                  |
+| ----------- | -------------------------------- | ----------------------- |
+| Vaultwarden | Self-hosted password manager     | `vault.cyrostack.dev`   |
+| KnFolio     | Portfolio website                | `knfolio.cyrostack.dev` |
+| WireGuard   | VPN access into the home network | `vpn.cyrostack.dev`     |
+
+---
+
+### Internal Services
+
+These services are intended for LAN or VPN access only.
+
+| Service      | Description                    |
+| ------------ | ------------------------------ |
+| Grafana      | Monitoring dashboards          |
+| Prometheus   | Metrics collection             |
+| Weave GitOps | Flux dashboard                 |
+| GopherGate   | WireGuard management dashboard |
+| Wake-on-LAN  | Remote power control           |
+| Pi-hole      | Internal DNS and ad-blocking   |
+
+---
+
+### Cluster Infrastructure
+
+Core infrastructure components running in the k3s cluster.
+
+| Component                | Purpose                        |
+| ------------------------ | ------------------------------ |
+| CoreDNS                  | Kubernetes internal DNS        |
+| Flannel                  | k3s CNI networking             |
+| local-path-provisioner   | Persistent volume provisioning |
+| metrics-server           | Kubernetes resource metrics    |
+| NGINX Ingress Controller | HTTP/HTTPS ingress routing     |
+| cert-manager             | TLS certificate automation     |
+| Flux                     | GitOps reconciliation          |
+
+---
 
 ## Repository Structure
+
 ```bash
 .
 ├── ansible-configs
 ├── archive
+├── assets
 ├── cert-manager
+├── clusters
+├── gophergate-deploy
 ├── LICENSE
 ├── nginx
 ├── porkbun-dns-updater
 ├── portfolio
-└── README.md
+├── README.md
+└── wakeonlan
 ```
 
-## Cloning This Repository 
-This repository uses **git submodules**.
+---
+
+## Directory Overview
+
+### `ansible-configs/`
+
+Ansible playbooks and roles for node preparation, base OS configuration, and cluster-related automation.
+
+### `nginx/`
+
+NGINX Ingress Controller configuration for routing HTTP and HTTPS traffic into the cluster
+
+### `cert-mangaer/`
+
+cert-manager configuration for TLS ceritifcate automation
+
+### `flux/`
+
+Flux GitOps configuration for reconciling Kubernetes resources from this repository.
+
+### `porkbun-dns-updater/`
+
+Dynamic DNS updater for Porkbun.
+
+This keeps public DNS records updated when the home public IP changes.
+
+### `portfolio/`
+
+Deployment configuration for my portfolio website.
+
+This application source code itself may live in a separate repository.
+
+### `archive/`
+
+Old, unused, paused, or experimental components.
+
+Nothing inside `archive/` is considered active.
+
+---
+
+## GitOps Workflow
+
+CyroStack uses Flux for GitOps-based deployment.
+
+```bash
+Git commit
+  ↓
+Push to GitHub
+  ↓
+Flux detects changes
+  ↓
+Flux reconciles cluster state
+  ↓
+k3s applies the desired configuration
+```
+
+This keeps the cluster state aligned with the repository and reduces manual changes on the cluster.
+
+---
+
+## Cloning This Repository
+
+This repository may use git submodules.
 
 Clone with:
+
 ```bash
 git clone --recurse-submodules https://github.com/Cyrof/CyroStack.git
 ```
 
-If already cloned:
+If the repository was already cloned without submodules:
+
 ```bash
-git submodule update --init --recursive
+git submodule update --init --recurse
 ```
 
-## Design Philosophy
-- Infrastructure first, app second
-- Clear separation of concerns
-- Predictable node roles
-- Minimal coupling between services
-- Everything documented so future-me doesn't suffer
+---
+
+## License
+
+Distrubuted under the Unlicence License. See [LICENSE](#license) for more information.

@@ -17,7 +17,7 @@ service:
 ingress:
   enabled: true
   className: nginx
-  host: knfolio.dev
+  host: knfolio.cyrostack.dev
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-http01
     nginx.ingress.kubernetes.io/ssl-redirect: "true"

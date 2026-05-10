@@ -9,10 +9,10 @@ metadata:
 spec:
   tls:
     - hosts:
-        - vault.knfolio.dev
+        - vault.cyrostack.dev
       secretName: vaultwarden-tls
   rules:
-    - host: vault.knfolio.dev
+    - host: vault.cyrostack.dev
       http:
         paths:
           - path: /

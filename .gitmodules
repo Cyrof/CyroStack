@@ -19,4 +19,4 @@
 	url = https://github.com/Cyrof/GopherGate.git
 [submodule "ournezt"]
 	path = ournezt
-	url = git@github.com:OurNeZt/OurNeZt-deploy.git
+	url = https://github.com/OurNeZt/OurNeZt-deploy.git

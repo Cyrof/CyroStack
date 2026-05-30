@@ -17,3 +17,6 @@
 [submodule "GopherGate"]
 	path = gophergate-deploy/GopherGate
 	url = https://github.com/Cyrof/GopherGate.git
+[submodule "ournezt"]
+	path = ournezt
+	url = git@github.com:OurNeZt/OurNeZt-deploy.git

@@ -48,9 +48,9 @@ core:
   runMigrations: "true"
   bootstrap:
     enabled: false
-    adminEmail: ""
+    adminEmail: "admin.ournezt.local"
     adminDisplayName: "Bootstrap Admin"
-    existingSecret: ""
+    existingSecret: "ournezt-boostrap-admin"
     passwordKey: BOOTSTRAP_ADMIN_PASSWORD
   resources:
     requests:

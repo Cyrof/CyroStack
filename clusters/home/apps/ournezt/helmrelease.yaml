@@ -10,10 +10,10 @@ spec:
   targetNamespace: ournezt
   chart:
     spec:
-      chart: ./ournezt/charts/ournezt
+      chart: ./charts/ournezt
       sourceRef:
         kind: GitRepository
-        name: flux-system
+        name: ournezt-deploy
         namespace: flux-system
       interval: 10m
   install:

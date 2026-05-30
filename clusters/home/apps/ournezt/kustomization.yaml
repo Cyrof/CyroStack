@@ -5,6 +5,7 @@ namespace: ournezt
 
 resources:
   - namespace.yaml
+  - gitrepository.yaml
   - secret-db-credentials.sops.yaml
   - helmrelease.yaml
 

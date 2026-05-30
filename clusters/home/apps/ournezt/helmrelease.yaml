@@ -1,0 +1,29 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: ournezt
+  namespace: ournezt
+spec:
+  interval: 10m
+  timeout: 5m
+  releaseName: ournezt
+  targetNamespace: ournezt
+  chart:
+    spec:
+      chart: ./ournezt/charts/ournezt
+      sourceRef:
+        kind: GitRepository
+        name: flux-system
+        namespace: flux-system
+      interval: 10m
+  install:
+    createNamespace: true
+    remediation:
+      retries: 3
+  upgrade:
+    remediation:
+      retries: 3
+  valuesFrom:
+    - kind: ConfigMap
+      name: ournezt-values
+      valuesKey: values.yaml

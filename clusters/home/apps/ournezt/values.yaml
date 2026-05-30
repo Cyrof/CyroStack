@@ -1,0 +1,113 @@
+fullnameOverride: ournezt
+
+global:
+  appEnv: production
+
+postgres:
+  enabled: true
+  image:
+    repository: postgres
+    tag: 17-bookworm
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 5432
+  auth:
+    database: ournezt
+    username: ournezt
+    existingSecret: ournezt-db-credentials
+    passwordKey: POSTGRES_PASSWORD
+  persistence:
+    enabled: true
+    storageClassName: ""
+    size: 2Gi
+    accessModes:
+      - ReadWriteOnce
+  resources:
+    requests:
+      cpu: 100m
+      memory: 256Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+core:
+  enabled: true
+  replicaCount: 1
+  image:
+    repository: ghcr.io/ournezt/ournezt-core
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 50051
+  grpcAddr: ":50051"
+  databaseURL: ""
+  sessionTokenBytes: 32
+  sessionTTL: 12h
+  runMigrations: "true"
+  bootstrap:
+    enabled: false
+    adminEmail: ""
+    adminDisplayName: "Bootstrap Admin"
+    existingSecret: ""
+    passwordKey: BOOTSTRAP_ADMIN_PASSWORD
+  resources:
+    requests:
+      cpu: 100m
+      memory: 128Mi
+    limits:
+      cpu: 500m
+      memory: 512Mi
+
+web:
+  enabled: true
+  replicaCount: 2
+  image:
+    repository: ghcr.io/ournezt/ournezt-web
+    tag: latest
+    pullPolicy: IfNotPresent
+  service:
+    type: ClusterIP
+    port: 8080
+  webAddr: ":8080"
+  requestTimeout: 5s
+  sessionCookieName: ournezt_session
+  sessionCookieMaxAge: 12h
+  sessionCookieSecure: "true"
+  resources:
+    requests:
+      cpu: 50m
+      memory: 128Mi
+    limits:
+      cpu: 300m
+      memory: 256Mi
+  ingress:
+    enabled: true
+    className: nginx
+    annotations:
+      kubernetes.io/ingress.class: nginx
+      cert-manager.io/cluster-issuer: letsencrypt-http01
+    hosts:
+      - host: ournezt.cyrostack.dev
+        paths:
+          - path: /
+            pathType: Prefix
+    tls:
+      - secretName: ournezt-tls
+        hosts:
+          - ournezt.cyrostack.dev
+
+podSecurityContext:
+  fsGroup: 999
+
+securityContext:
+  runAsUser: 10001
+  runAsGroup: 10001
+  runAsNonRoot: true
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -14,7 +14,7 @@ spec:
       sourceRef:
         kind: GitRepository
         name: ournezt-deploy
-        namespace: flux-system
+        namespace: ournezt
       interval: 10m
   install:
     createNamespace: true

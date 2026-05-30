@@ -100,3 +100,17 @@ jobs:
     successfulJobsHistoryLimit: 1
     failedJobsHistoryLimit: 1
     ttlSecondsAfterFinished: 300
+
+  - name: ournezt-cyrostack-daily
+    schedule: "0 7 * * *"
+    secretName: porkbun-cyrostack-ournezt
+    successfulJobsHistoryLimit: 10
+    failedJobsHistoryLimit: 10
+    ttlSecondsAfterFinished: 259200
+
+  - name: ournezt-cyrostack-frequent
+    schedule: "*/10 * * * *"
+    secretName: porkbun-cyrostack-ournezt
+    successfulJobsHistoryLimit: 1
+    failedJobsHistoryLimit: 1
+    ttlSecondsAfterFinished: 300

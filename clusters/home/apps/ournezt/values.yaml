@@ -47,7 +47,7 @@ core:
   sessionTTL: 12h
   runMigrations: "true"
   bootstrap:
-    enabled: false
+    enabled: true
     adminEmail: "admin.ournezt.local"
     adminDisplayName: "Bootstrap Admin"
     existingSecret: "ournezt-boostrap-admin"

@@ -50,7 +50,7 @@ core:
     enabled: true
     adminEmail: "admin.ournezt.local"
     adminDisplayName: "Bootstrap Admin"
-    existingSecret: "ournezt-boostrap-admin"
+    existingSecret: "ournezt-bootstrap-admin"
     passwordKey: BOOTSTRAP_ADMIN_PASSWORD
   resources:
     requests:

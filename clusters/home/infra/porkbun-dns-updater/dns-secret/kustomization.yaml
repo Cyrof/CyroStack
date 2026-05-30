@@ -9,3 +9,4 @@ resources:
   - secret-portfolio.sops.yaml
   - secret-vault-new.sops.yaml
   - secret-vpn-new.sops.yaml
+  - secret-ournezt.sops.yaml

@@ -4,25 +4,31 @@ metadata:
   name: cloudflare-tunnel
   namespace: cloudflare
 spec:
-  interval: 30m
+  interval: 15m
+
+  releaseName: cloudflare-tunnel
+  targetNamespace: cloudflare
+
   chart:
     spec:
-      chart: cloudflare-tunnel
+      chart: cloudflare-tunnel-remote
+      version: "0.1.2"
       sourceRef:
         kind: HelmRepository
         name: cloudflare
         namespace: flux-system
-      interval: 12h
-  values:
-    replicaCount: 2
 
-    image:
-      repository: cloudflare/cloudflared
-      tag: latest
-      pullPolicy: IfNotPresent
+  install:
+    createNamespace: true
+
+  upgrade:
+    cleanupOnFail: true
 
   valuesFrom:
+    - kind: ConfigMap
+      name: cloudflare-tunnel-values
+      valuesKey: values.yaml
     - kind: Secret
-      name: cloudflare-tunnel-token
-      valuesKey: tunnelToken
+      name: cloudflare-tunnel-secret
+      valuesKey: tunnel_token
       targetPath: cloudflare.tunnel_token

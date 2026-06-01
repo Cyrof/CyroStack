@@ -8,3 +8,4 @@ resources:
   - cert-manager-issuer-kustomization.yaml
   - porkbun-dns-updater/dns-secret
   - porkbun-dns-updater/flux
+  - cloudflare

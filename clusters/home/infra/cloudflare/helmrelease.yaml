@@ -1,0 +1,28 @@
+apiVersion: helm.toolkit.fluxcd.io/v2
+kind: HelmRelease
+metadata:
+  name: cloudflare-tunnel
+  namespace: cloudflare
+spec:
+  interval: 30m
+  chart:
+    spec:
+      chart: cloudflare-tunnel
+      sourceRef:
+        kind: HelmRepository
+        name: cloudflare
+        namespace: flux-system
+      interval: 12h
+  values:
+    replicaCount: 2
+
+    image:
+      repository: cloudflare/cloudflared
+      tag: latest
+      pullPolicy: IfNotPresent
+
+  valuesFrom:
+    - kind: Secret
+      name: cloudflare-tunnel-token
+      valuesKey: tunnelToken
+      targetPath: cloudflare.tunnel_token

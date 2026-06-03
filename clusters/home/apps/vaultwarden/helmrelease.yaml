@@ -8,13 +8,15 @@ spec:
   chart:
     spec:
       chart: vaultwarden
-      version: ">=0.0.0"
+      version: "0.38.0"
       sourceRef:
         kind: HelmRepository
         name: pascaliske
         namespace: flux-system
       interval: 1h
   values:
+    image:
+      tag: 1.36.0
     env:
       - name: TZ
         value: Asia/Singapore

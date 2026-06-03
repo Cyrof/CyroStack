@@ -4,7 +4,7 @@ namespace:
 
 image:
   repository: ghcr.io/cyrof/ddns-updater
-  tag: latest
+  tag: v0.1.0
   pullPolicy: IfNotPresent
 
 cronjob:

@@ -6,6 +6,6 @@ resources:
   - nginx
   - cert-manager-kustomization.yaml
   - cert-manager-issuer-kustomization.yaml
-  - porkbun-dns-updater/dns-secret
-  - porkbun-dns-updater/flux
+  - ddns-updater/dns-secret
+  - ddns-updater/flux
   - cloudflare

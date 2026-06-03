@@ -3,7 +3,7 @@ namespace:
   name: cyro-ddns
 
 image:
-  repository: cyrof/porkbun-ddns
+  repository: ghcr.io/cyrof/ddns-updater
   tag: latest
   pullPolicy: IfNotPresent
 
@@ -17,100 +17,9 @@ cronjob:
   suspend: false
 
 jobs:
-  # - name: main-daily
-  #   schedule: "0 7 * * *"
-  #   secretName: porkbun-creds
-  #   successfulJobsHistoryLimit: 10
-  #   failedJobsHistoryLimit: 10
-  #   ttlSecondsAfterFinished: 259200
-  #
-  # - name: main-frequent
-  #   schedule: "*/10 * * * *"
-  #   secretName: porkbun-creds
-  #   successfulJobsHistoryLimit: 1
-  #   failedJobsHistoryLimit: 1
-  #   ttlSecondsAfterFinished: 300
-
-  - name: vpn-daily
-    schedule: "0 7 * * *"
-    secretName: porkbun-creds-vpn
-    successfulJobsHistoryLimit: 10
-    failedJobsHistoryLimit: 10
-    ttlSecondsAfterFinished: 259200
-
   - name: vpn-frequent
     schedule: "*/10 * * * *"
-    secretName: porkbun-creds-vpn
-    successfulJobsHistoryLimit: 1
+    secretName: cloudflare-cyrostack-vpn
+    successfulJobHistoryLimit: 1
     failedJobsHistoryLimit: 1
     ttlSecondsAfterFinished: 300
-
-  # - name: vault-daily
-  #   schedule: "0 7 * * *"
-  #   secretName: porkbun-creds-vault
-  #   successfulJobsHistoryLimit: 10
-  #   failedJobsHistoryLimit: 10
-  #   ttlSecondsAfterFinished: 259200
-  #
-  # - name: vault-frequent
-  #   schedule: "*/10 * * * *"
-  #   secretName: porkbun-creds-vault
-  #   successfulJobsHistoryLimit: 1
-  #   failedJobsHistoryLimit: 1
-  #   ttlSecondsAfterFinished: 300
-  #
-  # - name: vault-cyrostack-daily
-  #   schedule: "0 7 * * *"
-  #   secretName: porkbun-cyrostack-vault
-  #   successfulJobsHistoryLimit: 10
-  #   failedJobsHistoryLimit: 10
-  #   ttlSecondsAfterFinished: 259200
-  #
-  # - name: vault-cyrostack-frequent
-  #   schedule: "*/10 * * * *"
-  #   secretName: porkbun-cyrostack-vault
-  #   successfulJobsHistoryLimit: 1
-  #   failedJobsHistoryLimit: 1
-  #   ttlSecondsAfterFinished: 300
-
-  - name: vpn-cyrostack-daily
-    schedule: "0 7 * * *"
-    secretName: porkbun-cyrostack-vpn
-    successfulJobsHistoryLimit: 10
-    failedJobsHistoryLimit: 10
-    ttlSecondsAfterFinished: 259200
-
-  - name: vpn-cyrostack-frequent
-    schedule: "*/10 * * * *"
-    secretName: porkbun-cyrostack-vpn
-    successfulJobsHistoryLimit: 1
-    failedJobsHistoryLimit: 1
-    ttlSecondsAfterFinished: 300
-
-  # - name: portfolio-cyrostack-daily
-  #   schedule: "0 7 * * *"
-  #   secretName: porkbun-cyrostack-portfolio
-  #   successfulJobsHistoryLimit: 10
-  #   failedJobsHistoryLimit: 10
-  #   ttlSecondsAfterFinished: 259200
-  #
-  # - name: portfolio-cyrostack-frequent
-  #   schedule: "*/10 * * * *"
-  #   secretName: porkbun-cyrostack-portfolio
-  #   successfulJobsHistoryLimit: 1
-  #   failedJobsHistoryLimit: 1
-  #   ttlSecondsAfterFinished: 300
-  #
-  # - name: ournezt-cyrostack-daily
-  #   schedule: "0 7 * * *"
-  #   secretName: porkbun-cyrostack-ournezt
-  #   successfulJobsHistoryLimit: 10
-  #   failedJobsHistoryLimit: 10
-  #   ttlSecondsAfterFinished: 259200
-  #
-  # - name: ournezt-cyrostack-frequent
-  #   schedule: "*/10 * * * *"
-  #   secretName: porkbun-cyrostack-ournezt
-  #   successfulJobsHistoryLimit: 1
-  #   failedJobsHistoryLimit: 1
-  #   ttlSecondsAfterFinished: 300

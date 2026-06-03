@@ -3,10 +3,4 @@ kind: Kustomization
 
 resources:
   - namespace.yaml
-  # - secret-main.sops.yaml
-  # - secret-vpn.sops.yaml
-  # - secret-vault.sops.yaml
-  - secret-portfolio.sops.yaml
-  - secret-vault-new.sops.yaml
-  - secret-vpn-new.sops.yaml
-  - secret-ournezt.sops.yaml
+  - secret-vpn.sops.yaml

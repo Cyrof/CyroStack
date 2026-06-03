@@ -16,7 +16,7 @@ spec:
       interval: 1h
   values:
     image:
-      tag: 1.35.3
+      tag: 1.36.0
     env:
       - name: TZ
         value: Asia/Singapore

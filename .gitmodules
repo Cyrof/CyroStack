@@ -7,9 +7,6 @@
 [submodule "portfolio/knfolio"]
 	path = portfolio/knfolio
 	url = https://github.com/Cyrof/kn-folio.git
-[submodule "porkbun-dns-updater/porkbun-dns"]
-	path = porkbun-dns-updater/porkbun-dns
-	url = https://github.com/Cyrof/Porkbun-dns.git
 [submodules "coffee-review-website"]
 	path = archive/coffee-review-website/
 [submodules "wakeonlan"]
@@ -20,3 +17,6 @@
 [submodule "ournezt"]
 	path = ournezt
 	url = https://github.com/OurNeZt/OurNeZt-deploy.git
+[submodule "dns-updater/ddns-updater"]
+	path = dns-updater/ddns-updater
+	url = https://github.com/Cyrof/ddns-updater.git

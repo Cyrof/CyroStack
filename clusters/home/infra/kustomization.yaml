@@ -9,3 +9,4 @@ resources:
   - ddns-updater/dns-secret
   - ddns-updater/flux
   - cloudflare
+  - nfs-csi

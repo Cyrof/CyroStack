@@ -20,7 +20,7 @@ postgres:
   persistence:
     enabled: true
     storageClassName: nfs-csi
-    size: 2Gi
+    size: 10Gi
     accessModes:
       - ReadWriteOnce
   resources:

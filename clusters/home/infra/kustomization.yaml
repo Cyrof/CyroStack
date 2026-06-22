@@ -3,6 +3,7 @@ kind: Kustomization
 
 resources:
   - weave-gitops
+  - metallb
   - nginx
   - cert-manager-kustomization.yaml
   - cert-manager-issuer-kustomization.yaml

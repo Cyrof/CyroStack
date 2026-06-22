@@ -28,24 +28,21 @@ ports:
       default: true
     exposedPort: 80
     protocol: TCP
-    redirections:
-      entryPoint:
-        to: websecure
-        scheme: https
-        permanent: true
 
   websecure:
     port: 8443
     expose:
       default: true
-      exposedPort: 443
-      protocol: TCP
-      tls:
-        enabled: true
-
-logs:
-  general:
-    level: INFO
+    exposedPort: 443
+    protocol: TCP
+    tls:
+      enabled: true
 
 api:
   dashboard: true
+
+additionalArguments:
+  - "--log.level=INFO"
+  - "--entrypoints.web.http.redirections.entrypoint.io=websecure"
+  - "--entrypoints.web.http.redirections.entrypoint.scheme=https"
+  - "--entrypoints.web.http.redirections.entrypoint.permanent=true"

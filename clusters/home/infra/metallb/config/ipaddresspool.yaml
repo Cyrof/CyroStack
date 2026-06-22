@@ -3,9 +3,9 @@ kind: IPAddressPool
 metadata:
   name: home-lan-pool
   namespace: metallb-system
-  spec:
-    addresses:
-      - 192.168.70.240-192.168.70.250
+spec:
+  addresses:
+    - 192.168.70.240-192.168.70.250
 
 ---
 apiVersion: metallb.io/v1beta1

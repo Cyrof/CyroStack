@@ -5,7 +5,7 @@ metadata:
   namespace: flux-system
 spec:
   interval: 10m
-  path: ./infra/metallb/base
+  path: ./metallb/base
   prune: true
   sourceRef:
     kind: GitRepository

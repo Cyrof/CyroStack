@@ -5,6 +5,7 @@ resources:
   - weave-gitops
   - metallb-kustomization.yaml
   - metallb-config-kustomization.yaml
+  - traefik
   - nginx
   - cert-manager-kustomization.yaml
   - cert-manager-issuer-kustomization.yaml

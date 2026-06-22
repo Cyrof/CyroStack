@@ -1,0 +1,51 @@
+deployment:
+  replicas: 2
+
+service:
+  enabled: true
+  type: loadbalancer
+  spec:
+    loadbalancerIP: 192.168.70.240
+
+ingressClass:
+  enabled: true
+  isDefaultClass: false
+  name: traefik
+
+providers:
+  kuberentesCRD:
+    enabled: true
+  kubernetesIngress:
+    enabled: true
+    ingressClass: traefik
+    publishedService:
+      enabled: true
+
+ports:
+  web:
+    port: 8000
+    expose:
+      default: true
+    exposedPort: 80
+    protocol: TCP
+    redirections:
+      entryPoint:
+        to: websecure
+        scheme: https
+        permanent: true
+
+  websecure:
+    port: 8443
+    expose:
+      default: true
+      exposedPort: 443
+      protocol: TCP
+      tls:
+        enabled: true
+
+logs:
+  general:
+    level: INFO
+
+api:
+  dashboard: true

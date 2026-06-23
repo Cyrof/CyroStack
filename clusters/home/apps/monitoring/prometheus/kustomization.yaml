@@ -5,6 +5,7 @@ namespace: monitoring
 resources:
   - helmrepository.yaml
   - helmrelease.yaml
+  - pvc-nfs.yaml
 
 configMapGenerator:
   - name: prometheus-scrape-configs

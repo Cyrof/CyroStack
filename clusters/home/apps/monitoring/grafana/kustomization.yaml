@@ -4,3 +4,4 @@ resources:
   - helmrepository.yaml
   - secret-admin.sops.yaml
   - helmrelease.yaml
+  - pvc-nfs.yaml

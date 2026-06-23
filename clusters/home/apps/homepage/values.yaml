@@ -1,0 +1,123 @@
+image:
+  repository: ghcr.io/gethomepage/homepage
+  tag: v1.13.1
+
+enableRbac: true
+
+serviceAccount:
+  create: true
+  name: homepage
+
+service:
+  main:
+    ports:
+      http:
+        port: 3000
+
+ingress:
+  main:
+    enabled: true
+    ingressClassName: traefik
+    annotations:
+      gethomepage.dev/enabled: "true"
+      gethomepage.dev/name: Homepage
+      gethomepage.dev/group: Cluster
+      gethomepage.dev/description: CyroStack internal dashboard
+      gethomepage.dev/icon: homepage.png
+    hosts:
+      - host: homepage.cyrostack.arpa
+        paths:
+          - path: /
+            pathType: Prefix
+
+env:
+  - name: HOMEPAGE_ALLOWED_HOSTS
+    value: homepage.cyrostack.arpa
+
+config:
+  kubernetes:
+    mode: cluster
+    ingress: true
+    traefik: true
+
+  settings:
+    title: CyroStack
+    description: Home Lab Dashboard
+    theme: dark
+    color: slate
+    target: _blank
+    hideVersion: true
+
+  bookmarks:
+    - Developer:
+        - GitHub:
+            - abbr: GH
+              href: https://github.com/
+        - Flux:
+            - abbr: FX
+              href: https://fluxcd.io/
+
+  services:
+    - CyroStack:
+        - Vaultwarden:
+            icon: vaultwarden.png
+            href: https://vault.cyrostack.dev
+            description: Password manager
+
+        - OurNeZt:
+            icon: mdi-home-city
+            href: https://ournezt.cyrostack.dev
+            description: Housing calculator
+
+    - Monitoring:
+        - Grafana:
+            icon: grafana.png
+            href: https://grafana.cyrostack.arpa
+            description: Metrics dashboard
+            namespace: monitoring
+            app: grafana
+
+        - Prometheus:
+            icon: prometheus.png
+            href: https://prometheus.cyrostack.arpa
+            description: Metrics backend
+            namespace: monitoring
+            app: prometheus
+
+    - Cluster:
+        - Traefik:
+            icon: traefik.png
+            href: https://traefik.cyrostack.arpa
+            description: Ingress controller
+
+        - NAS:
+            icon: mdi-nas
+            href: http://homenas.cyrostack.arpa
+            description: OMV NAS
+
+  widgets:
+    - kubernetes:
+        cluster:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+          label: CyroStack
+        nodes:
+          show: true
+          cpu: true
+          memory: true
+          showLabel: true
+
+    - resources:
+        backend: resources
+        expanded: true
+        cpu: true
+        memory: true
+        network: default
+
+    - search:
+        provider: duckduckgo
+        target: _blank
+
+  docker: {}

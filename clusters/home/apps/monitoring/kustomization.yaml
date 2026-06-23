@@ -5,3 +5,5 @@ resources:
   - prometheus
   - grafana
   - blackbox-exporter
+  - loki
+  - alloy

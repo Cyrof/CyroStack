@@ -55,7 +55,8 @@ spec:
     persistence:
       enabled: true
       type: pvc
-      size: 2Gi
+      existingClaim: grafana-storage-nfs
+      size: 5Gi
       accessModes:
         - ReadWriteOnce
 

@@ -23,6 +23,9 @@ spec:
       retries: 3
 
   values:
+    test:
+      enabled: false
+
     deploymentMode: SingleBinary
 
     loki:

@@ -4,7 +4,7 @@ metadata:
   name: grafana-storage-nfs
   namespace: monitoring
 spec:
-  accessMode:
+  accessModes:
     - ReadWriteOnce
   storageClassName: nfs-csi
   resources:

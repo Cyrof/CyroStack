@@ -35,6 +35,19 @@ env:
     value: homepage.cyrostack.arpa
 
 config:
+  kubernetes:
+    mode: cluster
+    ingress: true
+    traefik: true
+
+  settings:
+    title: CyroStack
+    description: Home Lab Dashboard
+    theme: dark
+    color: slate
+    target: _blank
+    hideVersion: true
+
   services:
     - Public / External:
         - Cloudflare:

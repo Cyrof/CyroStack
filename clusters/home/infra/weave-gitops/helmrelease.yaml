@@ -24,7 +24,7 @@ spec:
   values:
     ingress:
       enabled: true
-      className: nginx
+      className: traefik
       hosts:
         - host: gitops.cyrostack.arpa
           paths:

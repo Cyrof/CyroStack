@@ -53,7 +53,7 @@ ui:
 
 ingress:
   enabled: true
-  className: nginx
+  className: traefik
   host: gophergate.cyrostack.arpa
   annotations: {}
   tls:

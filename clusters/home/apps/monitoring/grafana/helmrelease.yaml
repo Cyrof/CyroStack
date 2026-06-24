@@ -29,7 +29,7 @@ spec:
 
     ingress:
       enabled: true
-      ingressClassName: nginx
+      ingressClassName: traefik
       hosts:
         - grafana.cyrostack.arpa
       path: /

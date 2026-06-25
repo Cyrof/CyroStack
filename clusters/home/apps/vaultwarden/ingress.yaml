@@ -4,9 +4,9 @@ metadata:
   name: vaultwarden
   namespace: vaultwarden
   annotations:
-    kubernetes.io/ingress.class: traefik
     cert-manager.io/cluster-issuer: letsencrypt-http01
 spec:
+  ingressClassName: traefik
   tls:
     - hosts:
         - vault.cyrostack.dev

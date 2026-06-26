@@ -36,7 +36,7 @@ core:
   replicaCount: 1
   image:
     repository: ghcr.io/ournezt/ournezt-core
-    tag: v1.3.3
+    tag: v1.4.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
@@ -65,7 +65,7 @@ web:
   replicaCount: 2
   image:
     repository: ghcr.io/ournezt/ournezt-web
-    tag: v1.1.4
+    tag: v1.2.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
@@ -97,6 +97,15 @@ web:
       - secretName: ournezt-tls
         hosts:
           - ournezt.cyrostack.dev
+  maintenanceNotice:
+    enabled: true
+    level: warning
+    title: Planned maintenance
+    message: OurNeZt may be unavailable on 28 Jun 2026, 12:00 AM to approximately 2:00 AM SGT while we migrate ingress traffic.
+    startsAt: 28 Jun 2026, 12:00 AM SGT
+    endsAt: 28 Jun 2026, approximately 2:00 AM SGT
+    mountPath: /etc/ournezt/maintenance-notice
+    fileName: notice.json
 
 podSecurityContext:
   fsGroup: 999

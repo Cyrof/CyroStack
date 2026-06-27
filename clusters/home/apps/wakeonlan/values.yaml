@@ -1,0 +1,38 @@
+image:
+  repository: cyrof/remotewakeserver
+  tag: latest
+  pullPolicy: Always
+
+replicaCount: 1
+
+service:
+  type: ClusterIP
+  port: 8000
+
+hostNetwork: true
+dnsPolicy: ClusterFirstWithHostNet
+
+containerPort: 8000
+
+auth:
+  enabled: false
+  existingSecret: ""
+  existingSecretKey: "token"
+
+ingress:
+  enabled: true
+  className: "traefik"
+  host: "wol.cyrostack.arpa"
+  path: "/"
+  pathType: Prefix
+  tls:
+    enabled: false
+    secretName: ""
+
+resources: {}
+
+nodeSelector: {}
+
+tolerations: []
+
+affinity: {}

@@ -26,3 +26,7 @@ spec:
     - kind: ConfigMap
       name: wakeonlan-values
       valuesKey: values.yaml
+
+    - kind: Secret
+      name: wakeonlan-secret-values
+      valuesKey: values.yaml

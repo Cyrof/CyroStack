@@ -16,11 +16,10 @@ service:
 
 ingress:
   enabled: true
-  className: nginx
+  className: traefik
   host: knfolio.cyrostack.dev
   annotations:
     cert-manager.io/cluster-issuer: letsencrypt-http01
-    nginx.ingress.kubernetes.io/ssl-redirect: "true"
   tls:
     enabled: true
     secretName: knfolio-tls

@@ -84,9 +84,9 @@ web:
       memory: 256Mi
   ingress:
     enabled: true
-    className: nginx
+    className: traefik
     annotations:
-      kubernetes.io/ingress.class: nginx
+      kubernetes.io/ingress.class: traefik
       cert-manager.io/cluster-issuer: letsencrypt-http01
     hosts:
       - host: ournezt.cyrostack.dev
@@ -98,7 +98,7 @@ web:
         hosts:
           - ournezt.cyrostack.dev
   maintenanceNotice:
-    enabled: true
+    enabled: false
     level: warning
     title: Planned maintenance
     message: OurNeZt may be unavailable on 28 Jun 2026, 12:00 AM to approximately 2:00 AM SGT while we migrate ingress traffic.

@@ -1,0 +1,17 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+namespace: coder
+
+resources:
+  - namespace.yaml
+  - secret.sops.yaml
+  - helmrelease.yaml
+
+configMapGenerator:
+  - name: coder-values
+    files:
+      - values.yaml=values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

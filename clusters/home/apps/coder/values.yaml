@@ -1,0 +1,87 @@
+domain:
+  host: coder.cyrostack.arpa
+  wildcardHost: "*.coder.cyrostack.arpa"
+  scheme: http
+
+workspace:
+  createNamespace: true
+  namespace: coder-workspaces
+
+  rbac:
+    enabled: true
+    serviceAccountName: coder-workspace-admin
+    clusterRoleName: cluster-admin
+
+  storage:
+    className: nfs-csi
+    defaultSize: 20Gi
+
+  image:
+    repository: ghcr.io/cyrof/cyrostack-coder
+    tag: v1.0.0
+
+postgresql:
+  enabled: true
+  fullnameOverride: coder-postgresql
+
+  auth:
+    username: coder
+    database: coder
+    existingSecret: coder-postgresql-secret
+    secretKeys:
+      adminPasswordKey: postgres-password
+      userPasswordKey: password
+
+  primary:
+    persistence:
+      enabled: true
+      storageClass: nfs-csi
+      size: 10Gi
+
+    resources:
+      requests:
+        cpu: 100m
+        memory: 256Mi
+      limits:
+        cpu: 1
+        memory: 1Gi
+
+coder:
+  enabled: true
+
+  coder:
+    service:
+      type: ClusterIP
+
+    ingress:
+      enable: true
+      className: traefik
+      host: coder.cyrostack.arpa
+      wildcardHost: "*.coder.cyrostack.arpa"
+      annotations: {}
+      tls:
+        enable: false
+
+    env:
+      - name: CODER_ACCESS_URL
+        value: "http://coder.cyrostack.arpa"
+
+      - name: CODER_WILDCARD_ACCESS_URL
+        value: "*.coder.cyrostack.arpa"
+
+      - name: CODER_PG_CONNECTION_URL
+        valueFrom:
+          secretKeyRef:
+            name: coder-db-url
+            key: url
+
+      - name: CODER_PROMETHEUS_ENABLE
+        value: "true"
+
+    resources:
+      requests:
+        cpu: 250m
+        memory: 512Mi
+      limits:
+        cpu: 1
+        memory: 1Gi

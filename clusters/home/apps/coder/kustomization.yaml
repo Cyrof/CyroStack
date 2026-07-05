@@ -8,6 +8,7 @@ resources:
   - gitrepository.yaml
   - secret.sops.yaml
   - certificate.yaml
+  - provisioner-rbac.yaml
   - helmrelease.yaml
 
 configMapGenerator:

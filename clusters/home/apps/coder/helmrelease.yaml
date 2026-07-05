@@ -5,10 +5,12 @@ metadata:
   namespace: coder
 spec:
   interval: 30m
+  releaseName: CyroStack-coder
+  targetNamespace: CyroStack-coder
 
   chart:
     spec:
-      chart: ./CyroStack-coder/chart
+      chart: ./chart
       sourceRef:
         kind: GitRepository
         name: flux-system

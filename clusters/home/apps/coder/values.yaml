@@ -1,7 +1,7 @@
 domain:
-  host: coder.cyrostack.arpa
-  wildcardHost: "*.coder.cyrostack.arpa"
-  scheme: http
+  host: coder.cyrostack.dev
+  wildcardHost: "*.coder.cyrostack.dev"
+  scheme: https
 
 workspace:
   createNamespace: true
@@ -62,18 +62,20 @@ coder:
     ingress:
       enable: true
       className: traefik
-      host: coder.cyrostack.arpa
-      wildcardHost: "*.coder.cyrostack.arpa"
-      annotations: {}
+      host: coder.cyrostack.dev
+      wildcardHost: "*.coder.cyrostack.dev"
+      annotations:
+        cert-manager.io/cluster-issuer: letsencrypt-dns01
       tls:
-        enable: false
+        enable: true
+        secretName: coder-tls
 
     env:
       - name: CODER_ACCESS_URL
-        value: "http://coder.cyrostack.arpa"
+        value: "https://coder.cyrostack.dev"
 
       - name: CODER_WILDCARD_ACCESS_URL
-        value: "*.coder.cyrostack.arpa"
+        value: "*.coder.cyrostack.dev"
 
       - name: CODER_PG_CONNECTION_URL
         valueFrom:
@@ -83,6 +85,12 @@ coder:
 
       - name: CODER_PROMETHEUS_ENABLE
         value: "true"
+
+      - name: CODER_TLS_ENABLE
+        value: "false"
+
+      - name: CODER_HTTP_ADDRESS
+        value: "0.0.0.0:8080"
 
     resources:
       requests:

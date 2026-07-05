@@ -10,11 +10,11 @@ spec:
 
   chart:
     spec:
-      chart: ./CyroStack-coder/chart
+      chart: ./chart
       sourceRef:
         kind: GitRepository
-        name: flux-system
-        namespace: flux-system
+        name: cyrostack-coder
+        namespace: coder
       interval: 1h
 
   install:

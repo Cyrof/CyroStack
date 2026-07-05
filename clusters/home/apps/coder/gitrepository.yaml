@@ -1,0 +1,10 @@
+apiVersion: source.toolkit.fluxcd.io/v1
+kind: GitRepository
+metadata:
+  name: cyrostack-coder
+  namespace: coder
+spec:
+  interval: 10m
+  url: https://github.com/cyrof/CyroStack-coder.git
+  ref:
+    branch: stable

@@ -8,7 +8,7 @@ spec:
 
   chart:
     spec:
-      chart: ./chart
+      chart: ./CyroStack-coder/chart
       sourceRef:
         kind: GitRepository
         name: flux-system

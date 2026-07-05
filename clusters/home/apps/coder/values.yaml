@@ -65,7 +65,7 @@ coder:
       host: coder.cyrostack.dev
       wildcardHost: "*.coder.cyrostack.dev"
       annotations:
-        cert-manager.io/cluster-issuer: letsencrypt-dns01
+        cert-manager.io/cluster-issuer: letsencrypt-http01
       tls:
         enable: true
         secretName: coder-tls

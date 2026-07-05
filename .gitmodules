@@ -20,3 +20,6 @@
 [submodule "dns-updater/ddns-updater"]
 	path = dns-updater/ddns-updater
 	url = https://github.com/Cyrof/ddns-updater.git
+[submodule "CryoStack-coder"]
+	path = CryoStack-coder
+	url = https://github.com/Cyrof/CryoStack-coder.git

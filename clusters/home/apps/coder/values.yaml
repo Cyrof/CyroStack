@@ -1,6 +1,6 @@
 domain:
   host: coder.cyrostack.dev
-  wildcardHost: "*.coder.cyrostack.dev"
+  wildcardHost: "*.cyrostack.dev"
   scheme: https
 
 workspace:
@@ -63,7 +63,7 @@ coder:
       enable: true
       className: traefik
       host: coder.cyrostack.dev
-      wildcardHost: "*.coder.cyrostack.dev"
+      wildcardHost: "*.cyrostack.dev"
       annotations:
         cert-manager.io/cluster-issuer: letsencrypt-dns01
       tls:
@@ -75,7 +75,7 @@ coder:
         value: "https://coder.cyrostack.dev"
 
       - name: CODER_WILDCARD_ACCESS_URL
-        value: "*.coder.cyrostack.dev"
+        value: "*.cyrostack.dev"
 
       - name: CODER_PG_CONNECTION_URL
         valueFrom:

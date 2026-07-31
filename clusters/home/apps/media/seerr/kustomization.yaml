@@ -9,6 +9,7 @@ resources:
 
 configMapGenerator:
   - name: seerr-values
+    namespace: media
     files:
       - values.yaml
 

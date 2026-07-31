@@ -4,5 +4,10 @@ kind: Kustomization
 resources:
   - namespace.yaml
   - pvc.yaml
+  - bjw-s-helmrepository.yaml
   - jellyfin
   - seerr
+  - radarr
+  - sonarr
+  - prowlarr
+  - qbittorrent

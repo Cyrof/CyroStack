@@ -1,0 +1,58 @@
+controllers:
+  main:
+    strategy: Recreate
+
+    containers:
+      main:
+        image:
+          repository: lscr.io/linuxserver/prowlarr
+          tag: latest
+          pullPolicy: Always
+
+        env:
+          PUID: "1000"
+          PGID: "1000"
+          TZ: Asia/Singapore
+          UMASK: "002"
+
+        resources:
+          requests:
+            cpu: 25m
+            memory: 128Mi
+          limits:
+            memory: 512Mi
+
+service:
+  main:
+    controller: main
+    type: ClusterIP
+
+    ports:
+      http:
+        port: 9696
+        protocol: HTTP
+
+ingress:
+  main:
+    enabled: true
+    className: traefik
+
+    hosts:
+      - host: prowlarr.cyrostack.arpa
+        paths:
+          - path: /
+            pathType: Prefix
+            service:
+              identifier: main
+              port: http
+
+persistence:
+  config:
+    type: persistentVolumeClaim
+    storageClass: nfs-csi
+    accessMode: ReadWriteOnce
+    size: 1Gi
+    retain: true
+
+    globalMounts:
+      - path: /config

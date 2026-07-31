@@ -1,0 +1,45 @@
+fullnameOverride: seerr
+
+image:
+  registry: ghcr.io
+  repository: seerr-team/seerr
+  tag: "v3.4.0"
+  pullPolicy: IfNotPresent
+
+extraEnv:
+  - name: TZ
+    value: Asia/Singapore
+
+service:
+  type: ClusterIP
+  port: 80
+
+# Seerr configuration
+config:
+  persistence:
+    size: 5Gi
+    accessModes:
+      - ReadWriteOnce
+    storageClass: nfs-csi
+
+ingress:
+  enabled: true
+  ingressClassName: traefik
+
+  annotations: {}
+
+  hosts:
+    - host: seerr.cyrostack.arpa
+      paths:
+        - path: /
+          pathType: Prefix
+
+  tls: []
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 128Mi
+
+  limits:
+    memory: 768Mi

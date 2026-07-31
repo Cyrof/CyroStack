@@ -1,0 +1,106 @@
+fullnameOverride: jellyfin
+
+replicaCount: 1
+
+#
+# Jellyfin should only run one replica.
+#
+# Recreate is particularly useful because the config volume uses
+# ReadWriteOnce storage.
+#
+deploymentStrategy:
+  type: Recreate
+
+image:
+  repository: docker.io/jellyfin/jellyfin
+  tag: "10.11.11"
+  pullPolicy: IfNotPresent
+
+service:
+  type: ClusterIP
+  port: 8096
+  portName: service
+
+ingress:
+  enabled: true
+  className: traefik
+
+  annotations: {}
+
+  hosts:
+    - host: jellyfin.cyrostack.arpa
+      paths:
+        - path: /
+          pathType: Prefix
+
+  tls: []
+
+# 
+# Jellyfin application configuration
+# 
+jellyfin:
+  enableDLNA: false
+
+  env:
+    - name: TZ
+      value: Asia/Singapore
+
+    - name: JELLYFIN_PublishedServerUrl
+      value: http://jellyfin.cyrostack.arpa
+
+    #
+    # NFS filesystem notifications can be unreliable
+    # Polling avoids missing newly-added media
+    #
+    - name: DOTNET_USE_POLLING_FILE_WATCHER
+      value: "1"
+
+# 
+# Storage
+#
+persistence:
+  config:
+    enabled: true
+    accessMode: ReadWriteOnce
+    size: 5Gi
+    storageClass: nfs-csi
+
+  # Actual movies and TV shows
+  media:
+    enabled: true
+    type: pvc
+    existingClaim: media-data
+
+  cache:
+    enabled: false
+
+resources:
+  requests:
+    cpu: 100m
+    memory: 156Mi
+
+  limits:
+    memory: 2Gi
+
+startupProbe:
+  tcpSocket:
+    port: http
+  initialDelaySeconds: 0
+  periodSeconds: 10
+  failureThreshold: 60
+
+livenessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 20
+  timeoutSeconds: 3
+
+readinessProbe:
+  httpGet:
+    path: /health
+    port: http
+  initialDelaySeconds: 10
+  periodSeconds: 10
+  timeoutSeconds: 3

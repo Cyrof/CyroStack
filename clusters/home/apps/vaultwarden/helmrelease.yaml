@@ -50,7 +50,8 @@ spec:
 
     persistentVolumeClaim:
       create: false
-      existingPersistentVolumeClaim: vaultwarden-storage-nfs
+      # existingPersistentVolumeClaim: vaultwarden-storage-nfs
+      existingPersistentVolumeClaim: vaultwarden-storage
       size: 1Gi
       storageClassName: ""
       mountPath: /data

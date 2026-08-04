@@ -19,8 +19,8 @@ postgres:
     passwordKey: POSTGRES_PASSWORD
   persistence:
     enabled: true
-    storageClassName: nfs-csi
-    size: 10Gi
+    storageClassName: local-path
+    size: 2Gi
     accessModes:
       - ReadWriteOnce
   resources:

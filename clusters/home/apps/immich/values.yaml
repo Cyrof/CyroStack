@@ -35,6 +35,25 @@ server:
                   name: immich-database-app
                   key: dbname
 
+  ingress:
+    main:
+      enabled: true
+      ingressClassName: traefik
+      annotations:
+        gethomepage.dev/enabled: "true"
+        gethomepage.dev/name: Immich
+        gethomepage.dev/group: Media
+        gethomepage.dev/description: CyroStack photo library
+        gethomepage.dev/icon: immich.png
+
+      hosts:
+        - host: immich.cyrostack.arpa
+          paths:
+            - path: /
+              pathType: Prefix
+              service:
+                identifier: main
+
 valkey:
   enabled: true
 

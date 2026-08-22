@@ -22,6 +22,25 @@ server:
         # Immich application
         # ---------------------------------------------------------------------
         main:
+          probes:
+            liveness:
+              spec:
+                timeoutSeconds: 10
+                periodSeconds: 10
+                failureThreshold: 12
+
+            readiness:
+              spec:
+                timeoutSeconds: 10
+                periodSeconds: 10
+                failureThreshold: 6
+
+            startup:
+              spec:
+                timeoutSeconds: 10
+                periodSeconds: 10
+                failureThreshold: 60
+
           env:
             DB_HOSTNAME:
               valueFrom:

@@ -1,3 +1,8 @@
+# -----------------------------------------------------------------------------
+# Immich
+# -----------------------------------------------------------------------------
+
+# Shared Immich image version
 controllers:
   main:
     containers:
@@ -5,10 +10,17 @@ controllers:
         image:
           tag: v3.1.0
 
+# -----------------------------------------------------------------------------
+# Immich Server
+# -----------------------------------------------------------------------------
+
 server:
   controllers:
     main:
       containers:
+        # ---------------------------------------------------------------------
+        # Immich application
+        # ---------------------------------------------------------------------
         main:
           env:
             DB_HOSTNAME:
@@ -35,10 +47,72 @@ server:
                   name: immich-database-app
                   key: dbname
 
+        # ---------------------------------------------------------------------
+        # rclone iCloud Drive mount
+        # ---------------------------------------------------------------------
+        rclone:
+          image:
+            repository: rclone/rclone
+            tag: "1.75.0"
+            pullPolicy: IfNotPresent
+
+          securityContext:
+            privileged: true
+
+          command:
+            - rclone
+
+          args:
+            - mount
+
+            # Only expose CyroPhotos from iCloud Drive
+            - "icloud:CyroPhotos"
+
+            # Mount point visible to Immich
+            - /mnt/icloud
+
+            # rclone configuration
+            - --config=/config/rclone/rclone.conf
+
+            # Immich must never modify iCloud originals
+            - --read-only
+
+            # Allow Immich container to read the FUSE filesystem
+            - --allow-other
+
+            # VFS cache
+            - --vfs-cache-mode=full
+            - --vfs-cache-max-size=2G
+            - --vfs-cache-max-age=6h
+            - --cache-dir=/cache
+
+            # Refresh directory information periodically
+            - --dir-cache-time=5m
+
+            # iCloud does not support rclone polling
+            - --poll-interval=0
+
+            # Logging
+            - --log-level=INFO
+
+          resources:
+            requests:
+              cpu: 25m
+              memory: 64Mi
+
+            limits:
+              memory: 256Mi
+
+  # ---------------------------------------------------------------------------
+  # Traefik Ingress
+  # ---------------------------------------------------------------------------
+
   ingress:
     main:
       enabled: true
+
       ingressClassName: traefik
+
       annotations:
         gethomepage.dev/enabled: "true"
         gethomepage.dev/name: Immich
@@ -51,11 +125,107 @@ server:
           paths:
             - path: /
               pathType: Prefix
+
               service:
                 identifier: main
 
+  # ---------------------------------------------------------------------------
+  # Server-only volumes
+  # ---------------------------------------------------------------------------
+
+  persistence:
+    # -------------------------------------------------------------------------
+    # Shared FUSE mount
+    #
+    # rclone mounts iCloud into this emptyDir.
+    #
+    # rclone:
+    #   /mnt/icloud
+    #
+    # Immich:
+    #   /mnt/icloud
+    #
+    # The actual photos are NOT stored in this volume.
+    # -------------------------------------------------------------------------
+
+    icloud:
+      enabled: true
+      type: emptyDir
+
+      # Kubernetes recommends memory-backed emptyDir for mount propagation.
+      # This contains the mountpoint itself, NOT the photos.
+      medium: Memory
+      sizeLimit: 16Mi
+
+      advancedMounts:
+        main:
+          main:
+            - path: /mnt/icloud
+              readOnly: true
+              mountPropagation: HostToContainer
+
+          rclone:
+            - path: /mnt/icloud
+              mountPropagation: Bidirectional
+
+    # -------------------------------------------------------------------------
+    # rclone configuration
+    #
+    # Comes from:
+    #
+    # Secret:
+    #   immich-rclone
+    #
+    # Key:
+    #   rclone.conf
+    # -------------------------------------------------------------------------
+
+    rclone-config:
+      enabled: true
+      type: secret
+      name: immich-rclone
+
+      advancedMounts:
+        main:
+          rclone:
+            - path: /config/rclone
+              readOnly: true
+
+    # -------------------------------------------------------------------------
+    # Temporary rclone VFS cache
+    #
+    # This is ephemeral.
+    # Pod deleted/recreated = cache deleted.
+    #
+    # Your originals remain in iCloud.
+    # -------------------------------------------------------------------------
+
+    rclone-cache:
+      enabled: true
+      type: emptyDir
+      sizeLimit: 2Gi
+
+      advancedMounts:
+        main:
+          rclone:
+            - path: /cache
+
+# -----------------------------------------------------------------------------
+# Valkey
+# -----------------------------------------------------------------------------
+
 valkey:
   enabled: true
+
+# -----------------------------------------------------------------------------
+# Immich persistent application data
+#
+# This is your existing NFS-backed PVC.
+#
+# It stores Immich-generated data such as thumbnails/previews and other
+# application data. The iCloud originals do NOT get imported here when
+# configured as an External Library.
+# -----------------------------------------------------------------------------
 
 immich:
   persistence:

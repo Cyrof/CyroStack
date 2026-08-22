@@ -10,20 +10,11 @@ spec:
     storageClass: nfs-csi
     size: 5Gi
 
-  imageName: ghcr.io/cloudnative-pg/postgresql:18-standard-trixie
+  imageName: ghcr.io/tensorchord/cloudnative-vectorchord:18.4-1.1.1
 
   postgresql:
     shared_preload_libraries:
       - "vchord.so"
-
-    extensions:
-      - name: vchord
-        image:
-          reference: ghcr.io/tensorchord/vchord-scratch:pg18-v1.1.1
-        dynamic_library_path:
-          - /usr/lib/postgresql/18/lib
-        extension_control_path:
-          - /usr/share/postgresql/18/
 
 ---
 apiVersion: postgresql.cnpg.io/v1

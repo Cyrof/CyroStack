@@ -130,7 +130,6 @@ server:
   ingress:
     main:
       enabled: true
-
       className: traefik
 
       annotations:
@@ -143,7 +142,7 @@ server:
         gethomepage.dev/icon: immich.png
 
       hosts:
-        - host: immich.cyrostack.arpa
+        - host: immich.cyrostack.dev
           paths:
             - path: /
               pathType: Prefix

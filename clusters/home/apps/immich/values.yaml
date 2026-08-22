@@ -79,6 +79,7 @@ server:
 
             # Allow Immich container to read the FUSE filesystem
             - --allow-other
+            - --allow-non-empty
 
             # VFS cache
             - --vfs-cache-mode=full

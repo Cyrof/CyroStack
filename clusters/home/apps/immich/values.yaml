@@ -112,9 +112,11 @@ server:
     main:
       enabled: true
 
-      ingressClassName: traefik
+      className: traefik
 
       annotations:
+        nginx.ingress.kubernetes.io/proxy-body-size: null
+
         gethomepage.dev/enabled: "true"
         gethomepage.dev/name: Immich
         gethomepage.dev/group: Media
@@ -126,7 +128,6 @@ server:
           paths:
             - path: /
               pathType: Prefix
-
               service:
                 identifier: main
 

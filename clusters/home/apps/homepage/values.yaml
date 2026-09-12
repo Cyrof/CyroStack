@@ -45,36 +45,111 @@ config:
     description: Home Lab Dashboard
     theme: dark
     color: slate
+
     target: _blank
     hideVersion: true
+    disableIndexing: true
+
+    fullWidth: true
+    useEqualHeights: true
+    statusStyle: dot
+    iconStyle: theme
+    headerStyle: boxedWidgets
+
+    background:
+      image: https://images.unsplash.com/photo-1451187580459-43490279c0fa?auto=format&fit=crop&w=2560&q=85
+      opacity: 35
+
+    cardBlur: md
+
+    layout:
+      CyroStack Apps:
+        icon: mdi-kubernetes
+        style: row
+        columns: 4
+
+      Media:
+        icon: mdi-multimedia
+        columns: 4
+
+      Monitoring:
+        icon: mdi-chart-line
+        style: row
+        columns: 3
+
+      Cluster / GitOps:
+        icon: mdi-server
+        style: row
+        columns: 3
+
+      Home Network:
+        icon: mdi-lan
+        style: row
+        columns: 3
+
+      Public / External:
+        icon: mdi-web
+        style: row
+        columns: 3
+        initiallyCollapsed: true
 
   services:
-    - Public / External:
-        - Cloudflare:
-            icon: cloudflare.png
-            href: https://dash.cloudflare.com
-            description: Cloudflare dashboard
-
-        - Porkbun:
-            icon: mdi-pig
-            href: https://porkbun.com/account/login
-            description: Domain registrar
-
     - CyroStack Apps:
         - OurNeZt:
             icon: mdi-home-city
             href: https://ournezt.cyrostack.dev
-            description: Housing calculator
+            description: Housing and financial planning
 
         - Vaultwarden:
             icon: vaultwarden.png
             href: https://vault.cyrostack.dev
-            description: Password manager
+            description: Password management
 
         - GopherGate:
             icon: mdi-gate
             href: https://gophergate.cyrostack.dev
-            description: Remote access / gateway
+            description: Remote access gateway
+
+        - Coder:
+            icon: coder.png
+            href: https://coder.cyrostack.dev
+            description: Cloud development environments
+
+        - KNfolio:
+            icon: mdi-card-account-details
+            href: https://knfolio.cyrostack.dev
+            description: Personal portfolio
+
+    - Media:
+        - Jellyfin:
+            icon: jellyfin.png
+            href: https://jellyfin.cyrostack.arpa
+            description: Movies, TV and anime
+
+        - Seerr:
+            icon: seerr.png
+            href: https://seerr.cyrostack.arpa
+            description: Media requests
+
+        - Sonarr:
+            icon: sonarr.png
+            href: https://sonarr.cyrostack.arpa
+            description: TV and anime management
+
+        - Radarr:
+            icon: radarr.png
+            href: https://radarr.cyrostack.arpa
+            description: Movie management
+
+        - Prowlarr:
+            icon: prowlarr.png
+            href: https://prowlarr.cyrostack.arpa
+            description: Indexer management
+
+        - qBittorrent:
+            icon: qbittorrent.png
+            href: https://qbittorrent.cyrostack.arpa
+            description: Download client
 
     - Monitoring:
         - Grafana:
@@ -92,9 +167,14 @@ config:
             app: prometheus
 
     - Cluster / GitOps:
+        - Rancher:
+            icon: rancher.png
+            href: https://rancher.cyrostack.arpa
+            description: Kubernetes cluster management
+
         - Weave GitOps:
             icon: weave-gitops.png
-            href: https://gitops.cyrostack.arpa:32080
+            href: https://gitops.cyrostack.arpa
             description: Flux GitOps dashboard
 
     - Home Network:
@@ -103,34 +183,46 @@ config:
             href: http://pihole.cyrostack.arpa/admin
             description: DNS and ad blocking
 
-        - OpenMediaVault:
-            icon: openmediavault.png
-            href: http://omv.cyrostack.arpa
-            description: NAS management
+    - Public / External:
+        - Cloudflare:
+            icon: cloudflare.png
+            href: https://dash.cloudflare.com
+            description: Cloudflare dashboard
+
+        - Porkbun:
+            icon: mdi-pig
+            href: https://porkbun.com/account/login
+            description: Domain registrar
 
   widgets:
+    - greeting:
+        text_size: x1
+        text: CyroStack
+
     - kubernetes:
         cluster:
           show: true
           cpu: true
           memory: true
           showLabel: true
-          label: CyroStack
+          label: Cluster
+
         nodes:
           show: true
           cpu: true
           memory: true
           showLabel: true
 
-    - resources:
-        backend: resources
-        expanded: true
-        cpu: true
-        memory: true
-        network: default
-
     - search:
         provider: duckduckgo
         target: _blank
+
+    - datetime:
+        text_size: x1
+        locale: en-SG
+        format:
+          dateStyle: medium
+          timeStyle: short
+          hour12: false
 
   docker: {}

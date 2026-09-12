@@ -42,8 +42,12 @@ spec:
         secretName: tls-rancher-ingress
 
     tls: ingress 
-
     agentTLSMode: strict
+
+    startupProbe:
+      timeoutSeconds: 5
+      periodSeconds: 10
+      failureThreshold: 60
 
     resources:
       requests:

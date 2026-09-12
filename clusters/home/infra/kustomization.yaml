@@ -14,3 +14,4 @@ resources:
   - cloudflare
   - nfs-csi
   - cloudnative-pg
+  - rancher-kustomization.yaml

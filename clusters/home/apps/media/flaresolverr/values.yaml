@@ -29,4 +29,3 @@ service:
     ports:
       http:
         port: 8191
-        protocol: HTTP

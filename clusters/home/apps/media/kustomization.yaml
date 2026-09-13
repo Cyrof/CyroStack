@@ -6,6 +6,7 @@ resources:
   - pvc.yaml
   - bjw-s-helmrepository.yaml
   - jellyfin
+  - flaresolverr
   - seerr
   - radarr
   - sonarr

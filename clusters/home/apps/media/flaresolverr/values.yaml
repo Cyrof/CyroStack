@@ -1,10 +1,13 @@
 controllers:
   flaresolverr:
+    replicas: 1
+
     containers:
       app:
         image:
           repository: ghcr.io/flaresolverr/flaresolverr
           tag: v3.5.0
+          pullPolicy: IfNotPresent
 
         env:
           TZ: Asia/Singapore
@@ -13,13 +16,17 @@ controllers:
         resources:
           requests:
             cpu: 50m
-            memory: 128Mi
+            memory: 256Mi
           limits:
+            cpu: 1000m
             memory: 1Gi
 
 service:
   app:
     controller: flaresolverr
+    type: ClusterIP
+
     ports:
       http:
         port: 8191
+        protocol: HTTP

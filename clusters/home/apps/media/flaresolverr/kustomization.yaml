@@ -3,3 +3,11 @@ kind: Kustomization
 
 resources:
   - helmrelease.yaml
+
+configMapGenerator:
+  - name: flaresolverr-values
+    files:
+      - values.yaml
+
+generatorOptions:
+  disableNameSuffixHash: true

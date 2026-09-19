@@ -169,7 +169,7 @@ config:
     - Cluster / GitOps:
         - Rancher:
             icon: rancher.png
-            href: https://rancher.cyrostack.arpa
+            href: https://rancher.cyrostack.dev
             description: Kubernetes cluster management
 
         - Weave GitOps:

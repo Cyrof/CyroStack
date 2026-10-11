@@ -98,12 +98,12 @@ web:
         hosts:
           - ournezt.cyrostack.dev
   maintenanceNotice:
-    enabled: false
+    enabled: true
     level: warning
-    title: Planned maintenance
-    message: OurNeZt may be unavailable on 28 Jun 2026, 12:00 AM to approximately 2:00 AM SGT while we migrate ingress traffic.
-    startsAt: 28 Jun 2026, 12:00 AM SGT
-    endsAt: 28 Jun 2026, approximately 2:00 AM SGT
+    title: Scheduled maintenance
+    message: OurNeZt will undergo scheduled maintenance on 11 October 2026, from 6:00 PM to approximately 10:00 PM SGT for a new version deployment. The service may be temporarily unavailable during this period. We apologies for any incovenience caused. 
+    startsAt: 11 Oct 2026, 6:00 PM SGT
+    endsAt: 11 Oct 2026, approximately 10:00 PM SGT
     mountPath: /etc/ournezt/maintenance-notice
     fileName: notice.json
 

@@ -36,7 +36,7 @@ core:
   replicaCount: 1
   image:
     repository: ghcr.io/ournezt/ournezt-core
-    tag: v1.5.0
+    tag: v1.6.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
@@ -46,6 +46,11 @@ core:
   sessionTokenBytes: 32
   sessionTTL: 12h
   runMigrations: "true"
+  authLimits:
+    ipLimit: 120
+    accountLimit: 5
+    rateWindow: 1m
+    maxConcurrent: 2
   bootstrap:
     enabled: true
     adminEmail: "admin@ournezt.local"
@@ -65,13 +70,23 @@ web:
   replicaCount: 2
   image:
     repository: ghcr.io/ournezt/ournezt-web
-    tag: v1.3.0
+    tag: v1.4.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
     port: 8080
   webAddr: ":8080"
   requestTimeout: 5s
+  authLimits:
+    ipLimit: 30
+    accountLimit: 5
+    rateWindow: 1m
+    maxConcurrent: 8
+  # Add actual Traefik source IPs/CIDRs here when known.
+  # Empty means users behind Traefik share its IP throttle budget.
+  trustedProxies: 
+    - "10.42.6.18/32"
+    - "10.42.2.141/32"
   sessionCookieName: ournezt_session
   sessionCookieMaxAge: 12h
   sessionCookieSecure: "true"
@@ -101,7 +116,11 @@ web:
     enabled: true
     level: warning
     title: Scheduled maintenance
-    message: OurNeZt will undergo scheduled maintenance on 11 October 2026, from 6:00 PM to approximately 10:00 PM SGT for a new version deployment. The service may be temporarily unavailable during this period. We apologies for any incovenience caused. 
+    message: >-
+      OurNeZt will undergo scheduled maintenance on 11 October 2026,
+      from 6:00 PM to approximately 10:00 PM SGT for a new version deployment.
+      The service may be temporarily unavailable during this period.
+      We apologize for any inconvenience caused.
     startsAt: 11 Oct 2026, 6:00 PM SGT
     endsAt: 11 Oct 2026, approximately 10:00 PM SGT
     mountPath: /etc/ournezt/maintenance-notice

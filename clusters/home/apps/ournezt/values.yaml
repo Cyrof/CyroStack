@@ -113,16 +113,18 @@ web:
         hosts:
           - ournezt.cyrostack.dev
   maintenanceNotice:
-    enabled: false
+    enabled: true
     level: warning
-    title: Scheduled maintenance
+    title: Scheduled maintenance - New Release Deployment
     message: >-
-      OurNeZt will undergo scheduled maintenance on 11 October 2026,
-      from 6:00 PM to approximately 10:00 PM SGT for a new version deployment.
+      OurNeZt will undergo scheduled maintenance on 13 November 2026,
+      from 2:00 PM to approximately 4:00 PM SGT for the deployment of
+      new Web and Core releases, including security enhancements,
+      bug fixes, and stability improvements.
       The service may be temporarily unavailable during this period.
       We apologize for any inconvenience caused.
-    startsAt: 11 Oct 2026, 6:00 PM SGT
-    endsAt: 11 Oct 2026, approximately 10:00 PM SGT
+    startsAt: 13 Nov 2026, 2:00 PM SGT
+    endsAt: 13 Nov 2026, approximately 4:00 PM SGT
     mountPath: /etc/ournezt/maintenance-notice
     fileName: notice.json
 

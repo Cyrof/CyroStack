@@ -3,7 +3,7 @@ fullnameOverride: "knfolio"
 
 image:
   repository: ghcr.io/cyrof/kn-folio
-  tag: v0.2.0
+  tag: v0.2.1
   pullPolicy: Always
 
 replicaCount: 2

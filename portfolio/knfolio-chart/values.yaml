@@ -2,8 +2,8 @@ nameOverride: ""
 fullnameOverride: "knfolio"
 
 image:
-  repository: cyrof/kn-folio
-  tag: latest
+  repository: ghcr.io/cyrof/kn-folio
+  tag: v0.2.0
   pullPolicy: Always
 
 replicaCount: 2
@@ -27,4 +27,4 @@ ingress:
 
 existingSecret:
   enabled: true
-  name: knfolio-secrets
+  name: knfolio-resend-secrets

@@ -135,7 +135,7 @@ web:
         hosts:
           - ournezt.cyrostack.dev
   maintenanceNotice:
-    enabled: true
+    enabled: false
     level: warning
     title: Scheduled maintenance - New Release Deployment
     message: >-

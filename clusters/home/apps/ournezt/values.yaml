@@ -36,12 +36,16 @@ core:
   replicaCount: 1
   image:
     repository: ghcr.io/ournezt/ournezt-core
-    tag: v1.6.0
+    tag: v2.0.0
     pullPolicy: IfNotPresent
   service:
     type: ClusterIP
     port: 50051
   grpcAddr: ":50051"
+  # Preserve the existing trusted in-cluster plaintext hop for this upgrade.
+  allowInsecure: true
+  tls:
+    enabled: false
   databaseURL: ""
   sessionTokenBytes: 32
   sessionTTL: 12h
@@ -52,7 +56,8 @@ core:
     rateWindow: 1m
     maxConcurrent: 2
   bootstrap:
-    enabled: true
+    # Existing installation: do not re-run one-time administrator bootstrap.
+    enabled: false
     adminEmail: "admin@ournezt.local"
     adminDisplayName: "Bootstrap Admin"
     existingSecret: "ournezt-bootstrap-admin"
@@ -70,6 +75,8 @@ web:
   replicaCount: 2
   image:
     repository: ghcr.io/ournezt/ournezt-web
+    # Stage 1: keep Web on v1.4.0 until Core v2 migration/readiness is verified.
+    # Stage 2: set this to v2.0.0 after Core migration/readiness is verified.
     tag: v1.4.0
     pullPolicy: IfNotPresent
   service:
@@ -77,6 +84,20 @@ web:
     port: 8080
   webAddr: ":8080"
   requestTimeout: 5s
+  shutdownTimeout: 10s
+  httpLimits:
+    readHeaderTimeout: 10s
+    readTimeout: 15s
+    writeTimeout: 30s
+    idleTimeout: 60s
+    maxRequestBodyBytes: 1048576
+  csrf:
+    existingSecret: ournezt-web-csrf
+    key: CSRF_AUTH_KEY
+  coreAllowInsecure: true
+  coreGrpcTLS:
+    enabled: false
+    insecureSkipVerify: "false"
   authLimits:
     ipLimit: 30
     accountLimit: 5
@@ -103,6 +124,7 @@ web:
     annotations:
       kubernetes.io/ingress.class: traefik
       cert-manager.io/cluster-issuer: letsencrypt-http01
+      traefik.ingress.kubernetes.io/router.middlewares: ournezt-ournezt-security-headers@kubernetescrd
     hosts:
       - host: ournezt.cyrostack.dev
         paths:

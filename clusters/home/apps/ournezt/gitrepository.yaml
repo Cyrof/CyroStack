@@ -2,9 +2,9 @@ apiVersion: source.toolkit.fluxcd.io/v1
 kind: GitRepository
 metadata:
   name: ournezt-deploy
-  namespace: flux-system
+  namespace: ournezt
 spec:
   interval: 1m
   url: https://github.com/OurNeZt/OurNeZt-deploy.git
   ref:
-    branch: stable
+    tag: v1.3.0

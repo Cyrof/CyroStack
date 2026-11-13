@@ -8,6 +8,8 @@ resources:
   - gitrepository.yaml
   - secret-db-credentials.sops.yaml
   - secret-bootstrap-admin.sops.yaml
+  - secret-web-csrf.sops.yaml
+  - middleware.yaml
   - helmrelease.yaml
 
 configMapGenerator:

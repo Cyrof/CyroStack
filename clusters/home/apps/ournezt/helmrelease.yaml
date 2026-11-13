@@ -11,6 +11,7 @@ spec:
   chart:
     spec:
       chart: ./charts/ournezt
+      reconcileStrategy: Revision
       sourceRef:
         kind: GitRepository
         name: ournezt-deploy
